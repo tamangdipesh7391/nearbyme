@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\admin;
+namespace App\Http\Controllers\provider;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 
-class AdminController extends Controller
+class ProviderController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -24,7 +24,6 @@ class AdminController extends Controller
         ]);
         if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){
             if(Auth::user()->role == 'admin'){
-                
                 return redirect()->route('admin.dashboard');
             }elseif(Auth::user()->role == 'provider'){
 
@@ -50,7 +49,7 @@ class AdminController extends Controller
      */
     public function create()
     {
-        return view('admin.register');
+        return view('provider.register');
     }
 
     /**
@@ -73,7 +72,7 @@ class AdminController extends Controller
         $data['password'] = Hash::make($request->password);
         $data['role'] = $request->role;
         User::create($data);
-        return redirect()->route('admin.login')->with('success','User created successfully');
+        return redirect()->route('provider.login')->with('success','User created successfully');
 
 
     }
