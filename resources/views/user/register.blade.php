@@ -51,7 +51,7 @@
                         <form action="{{ route('users.store') }}" method="POST">
                             @csrf
 
-                            <input type="hidden" name="role" value="admin">
+                            <input type="hidden" name="role" value="user">
 
 
                             <!-- name input -->

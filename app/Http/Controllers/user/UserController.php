@@ -27,6 +27,7 @@ class UserController extends Controller
                 return redirect()->route('user.login')->with('error','Your account is not active yet. Please contact admin.');
                 }
             if(Auth::user()->role == 'user'){
+                $request->session()->put('session_user', Auth::user());
                 return redirect()->route('user.dashboard');
             }else{
                 return redirect()->route('user.login')->with('error', 'You are not a user');
@@ -96,7 +97,8 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+        $user = User::findOrfail($id);
+        return view('user.pages.user.edit',compact('user'));
     }
 
     /**
@@ -108,7 +110,30 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $user = User::findOrfail($id);
+        $request->has('avatar') ? $request->validate([
+            'avatar' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]) : '';
+        if($request->has('avatar')){
+            $file = $request->file('avatar');
+            $fileName = md5(microtime()).'_'.$file->getClientOriginalName();
+            $file->move(public_path('user_avatar'),$fileName);
+            if($user->avatar != null){
+                $old_avatar = $user->avatar;
+                if(file_exists(public_path('user_avatar/'.$old_avatar))){
+                    unlink(public_path('user_avatar/'.$old_avatar));
+                }
+             }
+            $user->avatar = $fileName;
+            $user->save();
+        }else{
+            $user['name'] = $request->name;
+            $user['email'] = $request->email;
+            $user['phone'] = $request->phone;
+            $user['address'] = $request->address;
+            $user->save();
+        }
+        return redirect()->route('users.edit',$user->id)->with('success','User updated successfully');
     }
 
     /**

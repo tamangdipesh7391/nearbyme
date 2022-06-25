@@ -24,6 +24,7 @@ class AdminController extends Controller
         ]);
         if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){
             if(Auth::user()->role == 'admin'){
+                $request->session()->put('session_admin', Auth::user());
                 return redirect()->route('admin.dashboard');
             }else{
                 return redirect()->route('admin.login')->with('error', 'You are not an admin');
@@ -93,7 +94,8 @@ class AdminController extends Controller
      */
     public function edit($id)
     {
-        //
+        $admin = User::findOrfail($id);
+        return view('admin.pages.admin.edit',compact('admin'));
     }
 
     /**
@@ -105,7 +107,30 @@ class AdminController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $admin = User::findOrfail($id);
+        $request->has('avatar') ? $request->validate([
+            'avatar' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]) : '';
+        if($request->has('avatar')){
+            $file = $request->file('avatar');
+            $fileName = md5(microtime()).'_'.$file->getClientOriginalName();
+            $file->move(public_path('admin_avatar'),$fileName);
+            if($admin->avatar != null){
+                $old_avatar = $admin->avatar;
+                if(file_exists(public_path('admin_avatar/'.$old_avatar))){
+                    unlink(public_path('admin_avatar/'.$old_avatar));
+                }
+             }
+            $admin->avatar = $fileName;
+            $admin->save();
+        }else{
+            $admin['name'] = $request->name;
+            $admin['email'] = $request->email;
+            $admin['phone'] = $request->phone;
+            $admin['address'] = $request->address;
+            $admin->save();
+        }
+        return redirect()->route('admins.edit',$admin->id)->with('success','Admin updated successfully');
     }
 
     /**

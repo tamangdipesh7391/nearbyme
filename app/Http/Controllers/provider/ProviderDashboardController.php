@@ -5,6 +5,7 @@ namespace App\Http\Controllers\provider;
 use App\Http\Controllers\Controller;
 use App\Models\ProviderTracker;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class ProviderDashboardController extends Controller
 {
@@ -29,7 +30,7 @@ class ProviderDashboardController extends Controller
         $provider_current_data->save();
 
 
-        auth()->logout();
+        Session::forget('session_provider');
         return redirect()->route('provider.login');
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class AdminDashboardController extends Controller
 {
@@ -18,7 +19,7 @@ class AdminDashboardController extends Controller
 
     public function logout()
     {
-        auth()->logout();
+        Session::forget('session_admin');
         return redirect()->route('admin.login')->with('success','Logout Successfully');
     }
     public function listProviders()
@@ -54,6 +55,7 @@ class AdminDashboardController extends Controller
     }
     public function manageProvider(Request $request,$id)
     {
+       
         $provider = User::findOrfail($id);
         if($request->has('status')){
             $provider->status = $request->status;

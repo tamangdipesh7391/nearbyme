@@ -81,6 +81,24 @@
                                 </a>
                             </div>
 
+                              <!-- Profession input -->
+                              <div class="form-outline mb-4">
+                                <label class="form-label">Profession</label>
+
+                               <select class="form-control" name="profession_id" id="">
+                                <option selected disabled>Select Your Profession (Only One)</option>
+                                      @foreach ($professions as $profession)
+                                        <option @if (old('profession_id') == $profession->id) selected @endif value="{{ $profession->id }}">{{ $profession->name }}</option>        
+                                      @endforeach
+                               </select>
+                                <a style="color: red">
+                                    @error('profession_id')
+                                        {{ $message }}
+                                    @enderror
+                                </a>
+                            </div>
+
+
                             <!-- Password input -->
                             <div class="form-outline mb-4">
                                 <label class="form-label">Password</label>

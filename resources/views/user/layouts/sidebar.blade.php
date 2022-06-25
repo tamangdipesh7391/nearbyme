@@ -2,9 +2,9 @@
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="{{url('/')}}" class="brand-link">
-      <img src="{{url('dist/img/AdminLTELogo.png')}}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-      <span class="brand-text font-weight-light">NearByMe</span>
+    
+    <a href="{{url('/user-panel')}}" class="brand-link text-center">
+      <h3>User Panel</h3>    
     </a>
 
     <!-- Sidebar -->
@@ -12,10 +12,15 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="{{url('dist/img/user2-160x160.jpg')}}" class="img-circle elevation-2" alt="User Image">
+          @if (Session::get('session_user')->avatar != null && Session::get('session_user')->role == 'user')
+            <img src="{{url('user_avatar/'.Session::get('session_user')->avatar)}}" class="img-circle elevation-2" alt="{{Session::get('session_user')->name}}">
+            @else
+                <img src="{{url('user_avatar/default.jpg')}}" class="img-circle elevation-2" alt="{{Session::get('session_user')->name}}">
+
+          @endif
         </div>
         <div class="info">
-          <a href="#" class="d-block">Dipesh Tamang Jr. <span class="right badge badge-primary">User</span></a>
+          <a href="{{route('users.edit',Session::get('session_user')->id)}}" class="d-block">{{Session::get('session_user')->name}}</a>
         </div>
       </div>
 

@@ -25,6 +25,11 @@ class User extends Authenticatable
         'avatar',
         'status',
         'password',
+        'phone',
+        'citizenship',
+        'profession_id',
+        'address',
+
     ];
 
     /**
@@ -45,4 +50,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function profession()
+    {
+        return $this->belongsTo(Profession::class);
+    }
 }

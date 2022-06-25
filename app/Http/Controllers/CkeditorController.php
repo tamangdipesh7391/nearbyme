@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\Backend;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\Backend\BackendController;
 use Illuminate\Http\Request;
 
 class CkeditorController extends Controller
 {
     public function upload(Request $request)
     {
+      
        
         if($request->hasFile('upload')) {
             //get filename with extension
