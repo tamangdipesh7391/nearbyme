@@ -15,7 +15,7 @@
           <img src="{{url('dist/img/user2-160x160.jpg')}}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">Dipesh Tamang Jr.</a>
+          <a href="#" class="d-block">Dipesh Tamang Jr. <span class="right badge badge-primary">Provider</span></a>
         </div>
       </div>
 

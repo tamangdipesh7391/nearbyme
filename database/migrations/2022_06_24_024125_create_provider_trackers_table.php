@@ -20,6 +20,7 @@ class CreateProviderTrackersTable extends Migration
             $table->string('current_longitude')->nullable();
             $table->string('last_latitude')->nullable();
             $table->string('last_longitude')->nullable();
+            $table->boolean('is_active')->default(0);
             $table->timestamps();
         });
     }

@@ -24,14 +24,9 @@ class AdminController extends Controller
         ]);
         if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){
             if(Auth::user()->role == 'admin'){
-                
                 return redirect()->route('admin.dashboard');
-            }elseif(Auth::user()->role == 'provider'){
-
-                return redirect('/provider-panel');
-            }elseif(Auth::user()->role == 'user'){
-
-                return redirect('user-panel');
+            }else{
+                return redirect()->route('admin.login')->with('error', 'You are not an admin');
             }
        
         }else{
@@ -72,6 +67,7 @@ class AdminController extends Controller
         $data['email'] = $request->email;
         $data['password'] = Hash::make($request->password);
         $data['role'] = $request->role;
+        $data['status'] = 'active';
         User::create($data);
         return redirect()->route('admin.login')->with('success','User created successfully');
 

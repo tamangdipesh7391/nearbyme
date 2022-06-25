@@ -14,6 +14,18 @@ Route::group(['prefix' => 'admin-panel'],function(){
         Route::get('/logout',[AdminDashboardController::class,'logout'])->name('admin.logout');
         Route::get('/',[AdminDashboardController::class,'index'])->name('admin.dashboard');
         Route::post('ckeditor/image_upload', [CkeditorController::class,'upload'])->name('upload');
+
+        Route::get('/providers',[AdminDashboardController::class,'listProviders'])->name('admin.providers');
+        Route::get('/providers/soft_delete/{id}',[AdminDashboardController::class,'softDeleteProvider'])->name('admin.providers.soft_delete');
+        Route::get('/providers/restore/{id}',[AdminDashboardController::class,'restoreProvider'])->name('admin.providers.restore');
+        Route::get('/providers/delete/{id}',[AdminDashboardController::class,'deleteProvider'])->name('admin.providers.delete');
+        Route::patch('/providers/manage/{id}',[AdminDashboardController::class,'manageProvider'])->name('admin.providers.manage');
+
+        Route::get('/users',[AdminDashboardController::class,'listUsers'])->name('admin.users');
+        Route::get('/users/soft_delete/{id}',[AdminDashboardController::class,'softDeleteUser'])->name('admin.users.soft_delete');
+        Route::get('/users/restore/{id}',[AdminDashboardController::class,'restoreUser'])->name('admin.users.restore');
+        Route::get('/users/delete/{id}',[AdminDashboardController::class,'deleteUser'])->name('admin.users.delete');
+        Route::patch('/users/manage/{id}',[AdminDashboardController::class,'manageUser'])->name('admin.users.manage');
     });
    
 

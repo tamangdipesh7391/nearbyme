@@ -120,7 +120,7 @@
         </a>
       </li> 
       <li class="nav-item">
-        <a class="btn btn-danger" onclick="return(confirm('Are you sure you want to log out?'))" data-widget="Log out" href="{{route('admin.logout')}}" role="button">
+        <a class="btn btn-danger" onclick="return(confirm('Are you sure you want to log out?'))" data-widget="Log out" href="{{route('user.logout')}}" role="button">
           <i  class="fas fa-power-off"></i> Log out
         </a>
       </li>

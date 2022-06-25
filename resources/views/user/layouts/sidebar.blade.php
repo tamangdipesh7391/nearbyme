@@ -15,7 +15,7 @@
           <img src="{{url('dist/img/user2-160x160.jpg')}}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">Dipesh Tamang Jr.</a>
+          <a href="#" class="d-block">Dipesh Tamang Jr. <span class="right badge badge-primary">User</span></a>
         </div>
       </div>
 
@@ -26,7 +26,7 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-               <li class="nav-item menu-closed">
+               {{-- <li class="nav-item menu-closed">
                 <a href="#" class="nav-link active">
                   <i class="nav-icon fas fa-list"></i>
                   <p>
@@ -50,39 +50,14 @@
                   
     
                 </ul>
-              </li>
-          <li class="nav-item menu-closed">
-            <a href="#" class="nav-link active">
-              <i class="nav-icon fas fa-list"></i>
-              <p>
-                Subject
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="" class="nav-link ">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Add Subject</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Manage Subject</p>
-                </a>
-              </li>
-              
-
-            </ul>
-          </li>
-          
+              </li> --}}
+        
          
           <li class="nav-item menu-closed">
             <a href="" class="nav-link active">
-              <i class="nav-icon fas fa-cogs"></i>
+              <i class="nav-icon fas fa-book"></i>
               <p>
-                Manage Subject Level
+                Manage History
               </p>
             </a>
           

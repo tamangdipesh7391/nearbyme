@@ -4,7 +4,7 @@
     <!-- Brand Logo -->
     <a href="{{url('/')}}" class="brand-link">
       <img src="{{url('dist/img/AdminLTELogo.png')}}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-      <span class="brand-text font-weight-light">NearByMe</span>
+      <span class="brand-text font-weight-light">NearByMe </span>
     </a>
 
     <!-- Sidebar -->
@@ -15,7 +15,7 @@
           <img src="{{url('dist/img/user2-160x160.jpg')}}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">Dipesh Tamang Jr.</a>
+          <a href="#" class="d-block">Dipesh Tamang Jr.<span class="right badge badge-primary">Admin</span></a>
         </div>
       </div>
 
@@ -26,7 +26,7 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-               <li class="nav-item menu-closed">
+               {{-- <li class="nav-item menu-closed">
                 <a href="#" class="nav-link active">
                   <i class="nav-icon fas fa-list"></i>
                   <p>
@@ -50,26 +50,26 @@
                   
     
                 </ul>
-              </li>
+               </li> --}}
           <li class="nav-item menu-closed">
             <a href="#" class="nav-link active">
-              <i class="nav-icon fas fa-list"></i>
+              <i class="nav-icon fas fa-cogs"></i>
               <p>
-                Subject
+                Manage
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="" class="nav-link ">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Add Subject</p>
+                <a href="{{route('admin.users')}}" class="nav-link ">
+                  <i class="far fa-user nav-icon"></i>
+                  <p>Manage Users</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Manage Subject</p>
+                <a href="{{route('admin.providers')}}" class="nav-link">
+                  <i class="far fa-user-circle nav-icon"></i>
+                  <p>Manage Providers</p>
                 </a>
               </li>
               
@@ -78,7 +78,7 @@
           </li>
           
          
-          <li class="nav-item menu-closed">
+          {{-- <li class="nav-item menu-closed">
             <a href="" class="nav-link active">
               <i class="nav-icon fas fa-cogs"></i>
               <p>
@@ -86,7 +86,7 @@
               </p>
             </a>
           
-          </li>
+          </li> --}}
          
          
               

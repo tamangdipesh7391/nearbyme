@@ -23,14 +23,13 @@ class UserController extends Controller
             'password' => 'required',
         ]);
         if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){
-            if(Auth::user()->role == 'admin'){
-                return redirect()->route('admin.dashboard');
-            }elseif(Auth::user()->role == 'provider'){
-
-                return redirect('/provider-panel');
-            }elseif(Auth::user()->role == 'user'){
-
-                return redirect('user-panel');
+            if(Auth::user()->status == 'new'){
+                return redirect()->route('user.login')->with('error','Your account is not active yet. Please contact admin.');
+                }
+            if(Auth::user()->role == 'user'){
+                return redirect()->route('user.dashboard');
+            }else{
+                return redirect()->route('user.login')->with('error', 'You are not a user');
             }
        
         }else{
@@ -71,6 +70,7 @@ class UserController extends Controller
         $data['email'] = $request->email;
         $data['password'] = Hash::make($request->password);
         $data['role'] = $request->role;
+        $data['status'] = 'new';
         User::create($data);
         return redirect()->route('user.login')->with('success','User created successfully');
 

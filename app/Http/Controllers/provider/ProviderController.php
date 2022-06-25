@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\provider;
 
 use App\Http\Controllers\Controller;
+use App\Models\ProviderTracker;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Session;
+use Stevebauman\Location\Facades\Location;
+
 
 class ProviderController extends Controller
 {
@@ -18,19 +20,23 @@ class ProviderController extends Controller
      */
     public function verify(Request $request)
     {
+       
         $this->validate($request, [
             'email' => 'required',
             'password' => 'required',
         ]);
         if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){
-            if(Auth::user()->role == 'admin'){
-                return redirect()->route('admin.dashboard');
-            }elseif(Auth::user()->role == 'provider'){
-
-                return redirect('/provider-panel');
-            }elseif(Auth::user()->role == 'user'){
-
-                return redirect('user-panel');
+            if(Auth::user()->status == 'new'){
+                return redirect()->route('provider.login')->with('error','Your account is not active yet. Please contact admin.');
+                }
+            if(Auth::user()->role == 'provider'){
+                ProviderTracker::updateOrCreate(
+                    ['provider_id' => Auth::user()->id],
+                    ['provider_id' => Auth::user()->id, 'current_latitude' => $request->current_latitude, 'current_longitude' => $request->current_longitude, 'is_active' => 1]
+                );
+                return redirect()->route('provider.dashboard');
+            }else{
+                return redirect()->route('provider.login')->with('error', 'You are not a provider');
             }
        
         }else{
@@ -71,6 +77,7 @@ class ProviderController extends Controller
         $data['email'] = $request->email;
         $data['password'] = Hash::make($request->password);
         $data['role'] = $request->role;
+        $data['status'] = 'new';
         User::create($data);
         return redirect()->route('provider.login')->with('success','User created successfully');
 
@@ -122,3 +129,4 @@ class ProviderController extends Controller
         //
     }
 }
+
