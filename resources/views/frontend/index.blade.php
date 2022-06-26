@@ -1,6 +1,5 @@
 @extends('frontend.main')
 @section('content')
-
   <!-- ======= Hero Section ======= -->
   <section class="hero-section" id="hero">
 
@@ -18,13 +17,24 @@
 
     <div class="container">
       <div class="row align-items-center">
+       
         <div class="col-12 hero-text-image">
+        
           <div class="row">
             <div class="col-lg-8 text-center text-lg-start">
-              <h1 data-aos="fade-right">Promote Your App with SoftLand</h1>
-              <p class="mb-5" data-aos="fade-right" data-aos-delay="100">Lorem ipsum dolor sit amet, consectetur
-                adipisicing elit.</p>
-              <p data-aos="fade-right" data-aos-delay="200" data-aos-offset="-500"><a href="#" class="btn btn-outline-white">Get started</a></p>
+              <form action="{{route('home.search')}}" class="form-group mb-2 rounded d-flex" method="POST">
+                @csrf
+                <input required name="search" placeholder="Start searching here ..." type="search" id="home_search" class="form-control" style="border-top-left-radius: 10px;border-bottom-left-radius: 10px;width:60%;border:2px solid blue;">
+                <input type="submit" class="form-control" value="Search" style="border-top-right-radius: 10px;border-bottom-right-radius: 10px;width:20%;border:2px solid green;">
+              </form>
+              <h1 data-aos="fade-right">Save your time by using NearByMe</h1>
+              <p class="mb-5" data-aos="fade-right" data-aos-delay="100">
+                NearByMe is a web application that helps you to find the nearest service providers from your location.
+              </p>
+             
+               
+              
+              <p data-aos="fade-right" data-aos-delay="200" data-aos-offset="-500"><a href="#getstarted" class="btn btn-outline-white">Get started</a></p>
             </div>
             <div class="col-lg-4 iphone-wrap">
               <img src="{{url('frontend/assets/img/phone_1.png')}}" alt="Image" class="phone-1" data-aos="fade-right">
@@ -36,94 +46,59 @@
     </div>
 
   </section><!-- End Hero -->
-
+ @if (count($professions) > 0)
     <!-- ======= Home Section ======= -->
-    <section class="section">
+    <section class="section" id="services">
       <div class="container">
 
         <div class="row justify-content-center text-center mb-5">
           <div class="col-md-5" data-aos="fade-up">
-            <h2 class="section-heading">Save your time to using SoftLand</h2>
+            <h2 class="section-heading">Save your time by using NearByMe</h2>
           </div>
         </div>
 
         <div class="row">
-          <div class="col-md-4" data-aos="fade-up" data-aos-delay="">
-            <div class="feature-1 text-center">
-              <div class="wrap-icon icon-1">
-                <i class="bi bi-people"></i>
+         
+            @foreach ($professions as $profession)
+            <div style="cursor: pointer" class="col-md-4 shadow mt-4 pt-3" data-aos="fade-up" data-aos-delay="">
+              <div class="feature-1 text-center">
+                <div class="wrap-icon icon-1">
+                  @if ($profession->avatar != null)
+                    <img src="{{url('profession_avatar/'.$profession->avatar)}}" alt="{{$profession->name}}" style="border-radius: 50%;" class=" img-thumbnail" width="100px" height="100px">
+                  @else
+                    <img src="{{url('profession_avatar/default.jpg')}}" alt="{{$profession->name}}" style="border-radius: 50%;" class=" img-thumbnail" width="100px" height="100px">
+                    
+                  @endif
+                </div>
+                <h3 class="mb-3"><a href="">{{$profession->name}}</a></h3>
+                <p>{!!$profession->meta_description!!}</p>
               </div>
-              <h3 class="mb-3">Explore Your Team</h3>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem, optio.</p>
             </div>
-          </div>
-          <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
-            <div class="feature-1 text-center">
-              <div class="wrap-icon icon-1">
-                <i class="bi bi-brightness-high"></i>
-              </div>
-              <h3 class="mb-3">Digital Whiteboard</h3>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem, optio.</p>
+            @endforeach
+            <div class="d-flex justify-content-center mt-4">
+              {{$professions->links('pagination::bootstrap-4')}}
             </div>
-          </div>
-          <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
-            <div class="feature-1 text-center">
-              <div class="wrap-icon icon-1">
-                <i class="bi bi-bar-chart"></i>
-              </div>
-              <h3 class="mb-3">Design To Development</h3>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem, optio.</p>
-            </div>
-          </div>
+           
+            
+        
+          
         </div>
 
       </div>
     </section>
-
-    <section class="section">
-
-      <div class="container">
-     
-
-        <div class="row">
-          <div class="col-md-4">
-            <div class="step">
-              <span class="number">01</span>
-              <h3>Sign Up</h3>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem, optio.</p>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="step">
-              <span class="number">02</span>
-              <h3>Create Profile</h3>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem, optio.</p>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="step">
-              <span class="number">03</span>
-              <h3>Enjoy the app</h3>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem, optio.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </section>
-
-
-
-  
+  @endif
+ 
     <!-- ======= CTA Section ======= -->
-    <section class="section cta-section">
+    <section class="section cta-section" id="getstarted">
       <div class="container">
+      
         <div class="row align-items-center">
           <div class="col-md-6 me-auto text-center text-md-start mb-5 mb-md-0">
-            <h2>Starts Publishing Your Apps</h2>
+            <h2>Start Using our Platform</h2>
           </div>
           <div class="col-md-5 text-center text-md-end">
-            <p><a href="#" class="btn d-inline-flex align-items-center"><i class="bx bxl-apple"></i><span>App store</span></a> <a href="#" class="btn d-inline-flex align-items-center"><i class="bx bxl-play-store"></i><span>Google play</span></a></p>
+            <p><a href="#" class="btn btn-outline-info d-inline-flex align-items-center"><i class="bi bi-people-fill"></i><span>Sell Service</span></a> 
+              <a href="#" class="btn btn-outline-info d-inline-flex align-items-center"><i class="bi bi-people"></i><span>Use Service</span></a></p>
           </div>
         </div>
       </div>

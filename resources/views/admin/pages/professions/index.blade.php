@@ -39,9 +39,9 @@
                                     <td>{{$profession->name}}</td>
                                     <td>
                                         @if ($profession->avatar != null)
-                                            <img src="{{url('profession_avatar/'.$profession->avatar)}}" alt="{{$profession->name}}" class="img-thumbnail " style="width: 70px;">
+                                            <img src="{{url('profession_avatar/'.$profession->avatar)}}" alt="{{$profession->name}}" class="img-circle img-thumbnail " style="width: 70px;">
                                         @else
-                                        <img src="{{url('profession_avatar/default.jpg')}}" alt="{{$profession->name}}" class="img-thumbnail" style="width: 70px;">
+                                        <img src="{{url('profession_avatar/default.jpg')}}" alt="{{$profession->name}}" class="img-circle img-thumbnail" style="width: 70px;">
                                         @endif
                                     </td>
                                     <td>

@@ -3,7 +3,12 @@
 namespace App\Http\Controllers\frontend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Profession;
+use App\Models\RequestedService;
+use App\Models\User;
+use App\Models\UserTracker;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class FrontendController extends Controller
 {
@@ -14,72 +19,95 @@ class FrontendController extends Controller
      */
     public function index()
     {
-        return view('frontend.index');
+        $professions = Profession::where('status', 1)->paginate(6);
+        return view('frontend.index', compact('professions'));
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function homeSearch(Request $request)
     {
-        //
-    }
+        if(isset(Session::get('session_user')->id)){
+            $current_user_id = Session::get('session_user')->id;
+            $current_user_location = UserTracker::where('user_id', $current_user_id)->first();
+            $current_user_lat = $current_user_location->current_latitude??0;
+            $current_user_lng = $current_user_location->current_longitude??0;
+            $professions = User::join('professions', 'users.profession_id', '=', 'professions.id')
+            ->join('provider_trackers', 'users.id', '=', 'provider_trackers.provider_id')
+            ->where('users.status', 1)
+            ->where('professions.status', 1)
+            ->orWhere('professions.name', 'like', '%' . $request->search . '%')
+            ->orderBy('provider_trackers.is_active', 'desc')
+            ->paginate(10,[
+                'professions.name as profession_name',
+                'professions.avatar as profession_avatar',
+                'users.name as user_name',
+                'users.avatar as user_avatar',
+                'professions.*',
+                'users.*',
+                'provider_trackers.*'
+            ]);
+           
+    
+        for($i = 0; $i < count($professions); $i++) {
+            $professions[$i]['current_user_lattitude'] = $current_user_lat;
+            $professions[$i]['current_user_longitude'] = $current_user_lng; 
+            $distance = $this->calc_distance_in_mile($current_user_lat, $current_user_lng, $professions[$i]->current_latitude, $professions[$i]->current_longitude);
+            $professions[$i]['distance'] = $distance+$i;  
+         }
+        //  dd($professions);
+        return view('frontend.pages.homeSearch', compact('professions'));
+        }else{
+            $professions = User::join('professions', 'users.profession_id', '=', 'professions.id')
+            ->join('provider_trackers', 'users.id', '=', 'provider_trackers.provider_id')
+            ->where('users.status', 1)
+            ->where('professions.status', 1)
+            ->orWhere('professions.name', 'like', '%' . $request->search . '%')
+            ->orderBy('provider_trackers.is_active', 'desc')
+            ->paginate(10,[
+                'professions.name as profession_name',
+                'professions.avatar as profession_avatar',
+                'users.name as user_name',
+                'users.avatar as user_avatar',
+                'professions.*',
+                'users.*',
+                'provider_trackers.*'
+            ]);
+           
+            return view('frontend.pages.homeSearch', compact('professions'));
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+        }
+       
+        
     }
+    function calc_distance_in_mile($latitudeFrom, $longitudeFrom,
+    $latitudeTo,  $longitudeTo)
+        {
+            $long1 = deg2rad($longitudeFrom);
+            $long2 = deg2rad($longitudeTo);
+            $lat1 = deg2rad($latitudeFrom);
+            $lat2 = deg2rad($latitudeTo);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+            //Haversine Formula
+            $dlong = $long2 - $long1;
+            $dlati = $lat2 - $lat1;
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+            $val = pow(sin($dlati/2),2)+cos($lat1)*cos($lat2)*pow(sin($dlong/2),2);
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
+            $res = 2 * asin(sqrt($val));
+
+            $radius = 3958.756;
+            $distance_in_mile = $res*$radius;
+            $distance_in_km = round($distance_in_mile * 1.609344,2);
+            
+
+
+            return ($distance_in_km); //to convert into KM mul by 1.609344.
+        }
+
+        public function requestService(Request $request)
+        {
+            RequestedService::create($request->all());
+            return redirect('user-panel/request-history/'.$request->user_id)->with('success', 'Requested Successfully');
+        }
+  
+
 }

@@ -62,10 +62,13 @@
                             
                         @endif
                         <h2 class="fw-bold mb-5 text-center"><i class="fa fa-lock"></i> User Login </h2>
+                        <p id="status"></p>
                         <form action="{{route('user.verify')}}" method="POST">
 
 
                             @csrf
+                            <input type="hidden" name="current_latitude" id="lat">
+                            <input type="hidden" name="current_longitude" id="lng">
                             <!-- Email input -->
                             <div class="form-outline mb-4">
                                 <label class="form-label">Email</label>
@@ -105,7 +108,37 @@
     </section>
     <!-- Section: Design Block -->
 
-
+    <script>
+    
+        window.onload = function() {
+            var status = document.getElementById('status');
+            var lat = document.getElementById('lat');
+            var lng = document.getElementById('lng');
+    
+            function success(position) {
+                const latitude = position.coords.latitude;
+                const longitude = position.coords.longitude;
+                status.textContent = '';
+                lat.value = latitude;
+                lng.value = longitude;
+                            
+            }
+    
+            function error() {
+                status.textContent = 'Unable to retrieve your location';
+            }
+    
+            if (!navigator.geolocation) {
+                status.textContent = 'Geolocation is not supported by your browser';
+            } else {
+                status.textContent = 'Locating your location…';
+                navigator.geolocation.getCurrentPosition(success, error);
+            }
+    
+        }
+        
+    </script>
+    
 </body>
 
 </html>

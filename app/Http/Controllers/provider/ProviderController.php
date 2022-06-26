@@ -34,7 +34,12 @@ class ProviderController extends Controller
                 $request->session()->put('session_provider', Auth::user());
                 ProviderTracker::updateOrCreate(
                     ['provider_id' => Auth::user()->id],
-                    ['provider_id' => Auth::user()->id, 'current_latitude' => $request->current_latitude, 'current_longitude' => $request->current_longitude, 'is_active' => 1]
+                    [
+                        'provider_id' => Auth::user()->id, 
+                        'current_latitude' => $request->current_latitude, 
+                        'current_longitude' => $request->current_longitude, 
+                        'is_active' => 1
+                        ]
                 );
                 return redirect()->route('provider.dashboard');
             }else{

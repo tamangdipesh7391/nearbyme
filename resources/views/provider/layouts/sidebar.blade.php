@@ -30,80 +30,18 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
+           
+         
+         
                <li class="nav-item menu-closed">
-                <a href="#" class="nav-link active">
-                  <i class="nav-icon fas fa-list"></i>
+                <a href="{{route('provider.requestList',Session::get('session_provider')->id)}}" class="nav-link active">
+                  <i class="nav-icon fas fa-book"></i>
                   <p>
-                    Grade
-                    <i class="right fas fa-angle-left"></i>
+                    Manage Requests
                   </p>
                 </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="" class="nav-link ">
-                      <i class="far fa-circle nav-icon"></i>
-                      <p>Add Grade</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="" class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
-                      <p>Manage Grade</p>
-                    </a>
-                  </li>
-                  
-    
-                </ul>
-              </li>
-          <li class="nav-item menu-closed">
-            <a href="#" class="nav-link active">
-              <i class="nav-icon fas fa-list"></i>
-              <p>
-                Subject
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="" class="nav-link ">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Add Subject</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Manage Subject</p>
-                </a>
-              </li>
               
-
-            </ul>
-          </li>
-          
-         
-          <li class="nav-item menu-closed">
-            <a href="" class="nav-link active">
-              <i class="nav-icon fas fa-cogs"></i>
-              <p>
-                Manage Subject Level
-              </p>
-            </a>
-          
-          </li>
-         
-         
-              
-         
-          {{-- <li class="nav-item">
-            <a href="pages/widgets.html" class="nav-link">
-              <i class="nav-icon fas fa-th"></i>
-              <p>
-                Widgets
-                <span class="right badge badge-danger">New</span>
-              </p>
-            </a>
-          </li>  --}}
+              </li>
 
         </ul>
       </nav>

@@ -42,7 +42,7 @@ class ProfessionController extends Controller
         if($request->hasFile('avatar')){
             $file = $request->file('avatar');
             $fileName = md5(microtime()).'_'.$file->getClientOriginalName();
-            $file->move(public_path('professtion_avatar'),$fileName);
+            $file->move(public_path('profession_avatar'),$fileName);
            
         }
         $profession = new Profession();

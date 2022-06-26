@@ -16,7 +16,7 @@
             <img src="{{url('user_avatar/'.Session::get('session_user')->avatar)}}" class="img-circle elevation-2" alt="{{Session::get('session_user')->name}}">
             @else
                 <img src="{{url('user_avatar/default.jpg')}}" class="img-circle elevation-2" alt="{{Session::get('session_user')->name}}">
-
+                
           @endif
         </div>
         <div class="info">
@@ -59,7 +59,7 @@
         
          
           <li class="nav-item menu-closed">
-            <a href="" class="nav-link active">
+            <a href="{{route('user.request.history',Session::get('session_user')->id)}}" class="nav-link active">
               <i class="nav-icon fas fa-book"></i>
               <p>
                 Manage History

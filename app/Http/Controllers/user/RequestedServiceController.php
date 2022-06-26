@@ -1,0 +1,121 @@
+<?php
+
+namespace App\Http\Controllers\user;
+
+use App\Http\Controllers\Controller;
+use App\Models\RequestedService;
+use Illuminate\Http\Request;
+
+class RequestedServiceController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        //
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        //
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        //
+    }
+    public function requestHistory($id){
+        $requested_services = RequestedService::where('user_id', $id)->where('is_canceled',0)->get();
+        $pending_services = RequestedService::where('user_id', $id)->where('status', 'pending')->get();
+        $confirmed_services = RequestedService::where('user_id', $id)->where('status', 'confirmed')->get();
+        $rejected_services = RequestedService::where('user_id', $id)->where('status', 'rejected')->get();
+        $canceled_services = RequestedService::where('user_id', $id)->where('is_canceled', 1)->get();
+        $trashed_services = RequestedService::where('user_id', $id)->onlyTrashed()->get();
+        return view('user.pages.user.requestHistory', compact('requested_services', 'pending_services', 'confirmed_services', 'rejected_services', 'trashed_services', 'canceled_services'));
+    }
+    public function softDeleteRequest($id){
+        $requested_services = RequestedService::where('id', $id)->first();
+        $requested_services->delete();
+        return redirect()->back()->with('success', 'Request deleted successfully');
+    }
+    public function restoreRequest($id){
+        $requested_services = RequestedService::withTrashed()->find($id);
+        $requested_services->restore();
+        return redirect()->back()->with('success', 'Request restored successfully');
+    }
+    public function deleteRequest($id){
+        $requested_services = RequestedService::withTrashed()->find($id);
+        $requested_services->forceDelete();
+        return redirect()->back()->with('success', 'Request deleted successfully');
+    }
+    public function manageRequest($id){
+        $requested_services = RequestedService::findOrfail($id);
+        if($requested_services->is_canceled == 1){
+            $requested_services->is_canceled = 0;
+        }else{
+            $requested_services->is_canceled = 1;
+        }
+            $requested_services->save();
+            return redirect()->back()->with('success', 'Request accepted successfully');
+    }
+
+}

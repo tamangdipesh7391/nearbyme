@@ -17,18 +17,20 @@ class ProviderDashboardController extends Controller
         return view('provider.login');
     }
 
-    public function logout(Request $request)
+    public function logout()
     {
-        $provider_data = ProviderTracker::where('provider_id',auth()->user()->id)->get();
-        $provider = $provider_data[0]->id;
-        $provider_current_data = ProviderTracker::findOrfail($provider);
-        $provider_current_data->is_active = 0;
-        $provider_current_data->last_latitude = $provider_current_data->current_latitude;
-        $provider_current_data->last_longitude = $provider_current_data->current_longitude;
-        $provider_current_data->current_latitude = null;
-        $provider_current_data->current_longitude = null;
-        $provider_current_data->save();
-
+        $provider_data = ProviderTracker::where('provider_id',Session::get('session_provider')->id)->get();
+        if(count($provider_data)>0){
+            $provider = $provider_data[0]->id;
+            $provider_current_data = ProviderTracker::findOrfail($provider);
+            $provider_current_data->is_active = 0;
+            $provider_current_data->last_latitude = $provider_current_data->current_latitude;
+            $provider_current_data->last_longitude = $provider_current_data->current_longitude;
+            $provider_current_data->current_latitude = null;
+            $provider_current_data->current_longitude = null;
+            $provider_current_data->save();
+    
+        }
 
         Session::forget('session_provider');
         return redirect()->route('provider.login');

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\user;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\UserTracker;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -28,6 +29,16 @@ class UserController extends Controller
                 }
             if(Auth::user()->role == 'user'){
                 $request->session()->put('session_user', Auth::user());
+               
+                UserTracker::updateOrCreate(
+                    ['user_id' => Auth::user()->id],
+                    [
+                        'user_id' => Auth::user()->id, 
+                        'current_latitude' => $request->current_latitude, 
+                        'current_longitude' => $request->current_longitude, 
+                        'is_active' => 1
+                        ]
+                );
                 return redirect()->route('user.dashboard');
             }else{
                 return redirect()->route('user.login')->with('error', 'You are not a user');
