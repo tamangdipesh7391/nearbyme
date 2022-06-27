@@ -1,16 +1,103 @@
-
 @extends('provider.main')
 @section('content')
-<div class="row mb-2">
-    <div class="col-sm-6">
-      <h1 class="m-0">Dashboard</h1>
-    </div><!-- /.col -->
-    <div class="col-sm-6">
-      <ol class="breadcrumb float-sm-right">
-        <li class="breadcrumb-item"><a href="#">Home</a></li>
-        <li class="breadcrumb-item active">Dashboard v1</li>
-      </ol>
-    </div><!-- /.col -->
-  </div><!-- /.row -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Provider Dashboard</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                       
+                       
+                       
+                        <div class="col-md-4">
+                          <div class="card p-3">
+                              <div class="cart-header">
+                                  <h4 class="card-title">Today's Requests</h4>
+                              </div>
+                              <div class="card-body">
+                                  <h1 class="card-text">{{ $request_count_today }}</h1>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="card p-3">
+                            <div class="cart-header">
+                                <h4 class="card-title">Request of this month</h4>
+                            </div>
+                            <div class="card-body">
+                                <h1 class="card-text">{{ $request_count_month }}</h1>
+                            </div>
+                        </div>
+                    </div>
 
-@endsection
+                    <div class="col-md-4">
+                      <div class="card p-3">
+                          <div class="cart-header">
+                              <h4 class="card-title">Request of this year</h4>
+                          </div>
+                          <div class="card-body">
+                              <h1 class="card-text">{{ $request_count_year }}</h1>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="card p-3">
+                        <div class="cart-header">
+                            <h4 class="card-title">Total Requests</h4>
+                        </div>
+                        <div class="card-body">
+                            <h1 class="card-text">{{ $request_count }}</h1>
+                        </div>
+                    </div>
+                </div>
+
+
+                        {{-- chart data --}}
+                        <div class="col-md-12">
+
+                          <canvas id="canvas" height="280" width="600"></canvas>
+
+                        </div>
+                    </div>
+            <script src="{{url('dist/js/Chart.min.js')}}"></script>
+
+                      <script>
+                        var year = <?php echo $year; ?>;
+                       
+                        var request = <?php echo $request; ?>;
+                        var barChartData = {
+                            labels: year,
+                            datasets: [
+                            {
+                                label: 'Request',
+                                backgroundColor: "#4db2f6",
+                                data: request
+                            }
+                            ]
+                        };
+                    
+                        window.onload = function() {
+                            var ctx = document.getElementById("canvas").getContext("2d");
+                            window.myBar = new Chart(ctx, {
+                                type: 'bar',
+                                data: barChartData,
+                                options: {
+                                    elements: {
+                                        rectangle: {
+                                            borderWidth: 2,
+                                            borderColor: '#c1c1c1',
+                                            borderSkipped: 'bottom'
+                                        }
+                                    },
+                                    responsive: true,
+                                    title: {
+                                        display: true,
+                                        text: 'Overview of all Requests'
+                                    }
+                                }
+                            });
+                        };
+                    </script>
+                @endsection

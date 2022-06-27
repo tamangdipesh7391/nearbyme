@@ -47,6 +47,8 @@
                             backdrop-filter: blur(30px);
                             ">
                     <div class="card-body p-5 shadow-5">
+                        <a href="{{url('/')}}" style="text-decoration: none;"><i class="fa fa-arrow-left" ></i> Goto Site</a> 
+
                         <h2 class="fw-bold mb-5 text-center"><i class="fa fa-user"></i> Provider Sign up </h2>
                         <form action="{{ route('providers.store') }}" method="POST">
                             @csrf

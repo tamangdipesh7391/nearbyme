@@ -60,7 +60,8 @@
                         </div>
                             
                         @endif
-                        <h2 class="fw-bold mb-5 text-center"><i class="fa fa-lock"></i> Provider Login </h2>
+                        <a href="{{url('/')}}" style="text-decoration: none;"><i class="fa fa-arrow-left" ></i> Goto Site</a> 
+                        <h2 class="fw-bold mb-5 text-center"> <i class="fa fa-lock"></i> Provider Login </h2>
                         <p id="status"></p>
                         <form action="{{route('provider.verify')}}" method="POST">
 

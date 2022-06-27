@@ -57,7 +57,15 @@
                 </ul>
               </li> --}}
         
-         
+              <li class="nav-item menu-closed">
+                <a href="{{url('user-panel')}}" class="nav-link active">
+                  <i class="nav-icon fas fa-home"></i>
+                  <p>
+                    Dashboard
+                  </p>
+                </a>
+              
+              </li>
           <li class="nav-item menu-closed">
             <a href="{{route('user.request.history',Session::get('session_user')->id)}}" class="nav-link active">
               <i class="nav-icon fas fa-book"></i>

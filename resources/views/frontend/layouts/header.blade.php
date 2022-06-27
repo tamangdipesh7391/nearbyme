@@ -53,7 +53,7 @@
       <nav id="navbar" class="navbar">
         <ul>
           <li><a class="active " href="{{url('/')}}">Home</a></li>
-          <li><a href="#services">Services</a></li>
+          <li><a href="{{url('/#services')}}">Services</a></li>
          
           {{-- <li class="dropdown"><a href="#"><span>Drop Down</span> <i class="bi bi-chevron-down"></i></a>
             <ul>
@@ -72,7 +72,7 @@
               <li><a href="#">Drop Down 4</a></li>
             </ul>
           </li> --}}
-          <li><a href="#contact">Contact Us</a></li>
+          <li><a href="{{url('/#contact')}}">Contact Us</a></li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->

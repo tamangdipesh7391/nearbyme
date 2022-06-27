@@ -61,6 +61,8 @@
                         </div>
                             
                         @endif
+                        <a href="{{url('/')}}" style="text-decoration: none;"><i class="fa fa-arrow-left" ></i> Goto Site</a> 
+
                         <h2 class="fw-bold mb-5 text-center"><i class="fa fa-lock"></i> User Login </h2>
                         <p id="status"></p>
                         <form action="{{route('user.verify')}}" method="POST">

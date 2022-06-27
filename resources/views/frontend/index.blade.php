@@ -37,8 +37,8 @@
               <p data-aos="fade-right" data-aos-delay="200" data-aos-offset="-500"><a href="#getstarted" class="btn btn-outline-white">Get started</a></p>
             </div>
             <div class="col-lg-4 iphone-wrap">
-              <img src="{{url('frontend/assets/img/phone_1.png')}}" alt="Image" class="phone-1" data-aos="fade-right">
-              <img src="{{url('frontend/assets/img/phone_2.png')}}" alt="Image" class="phone-2" data-aos="fade-right" data-aos-delay="200">
+              <img src="{{url('frontend/assets/img/phone_img.png')}}" alt="Image" class="img-fluid phone_img" data-aos="fade-right">
+              {{-- <img src="{{url('frontend/assets/img/phone_2.png')}}" alt="Image" class="phone-2" data-aos="fade-right" data-aos-delay="200"> --}}
             </div>
           </div>
         </div>
@@ -99,8 +99,8 @@
           </div>
           <div class="col-md-5 text-center text-md-end">
             <p>
-              <a href="#" class="btn get-started-btns btn-outline-info d-inline-flex align-items-center"><i class="bi bi-people-fill"></i><span>Sell Service</span></a> 
-              <a href="#" class="btn get-started-btns btn-outline-info d-inline-flex align-items-center"><i class="bi bi-people"></i><span>Use Service</span></a></p>
+              <a href="{{url('provider-panel/login')}}" class="btn get-started-btns btn-outline-info d-inline-flex align-items-center"><i class="bi bi-people-fill"></i><span>Sell Service</span></a> 
+              <a href="{{url('user-panel/login')}}" class="btn get-started-btns btn-outline-info d-inline-flex align-items-center"><i class="bi bi-people"></i><span>Use Service</span></a></p>
           </div>
         </div>
       </div>

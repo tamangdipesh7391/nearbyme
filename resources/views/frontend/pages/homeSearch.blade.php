@@ -89,6 +89,14 @@
                                         <ul class="list-unstyled">
                                            <li class="h4" style="color:#100000">{{$profession->user_name}}</li>
                                            <li class="text-dark">
+                                             <span class="bi bi-circle-square text-primary"></span> : @if ($profession->is_active == 1)
+                                             <span class="text-success">Online</span>
+                                             @else
+                                             <span class="text-danger">Offline</span>
+                                                
+                                             @endif
+                                            </li>
+                                           <li class="text-dark">
                                             <span class="bi bi-person-badge text-primary"></span> : <b> {{$profession->profession->name}}</b>
                                            </li>
                                            
@@ -101,7 +109,7 @@
                                             $url = "https://maps.google.com/?q=".$profession->current_latitude.",".$profession->current_longitude;
                                           @endphp  
                                            @endif
-                                           <li style="font-weight:100"><span class="bi bi-map-fill text-primary"></span> : <a  @if ($profession->current_latitude != null && $profession->current_longitude != null) target="_blank" @endif href="{{$url}}" style="color:blue;"> <b><em>Locate Now</em></b></a><strong class="text-dark"> ({{$profession->distance.' KM'??''}}) </strong></li>
+                                           <li style="font-weight:100"><span class="bi bi-map-fill text-primary"></span> : <a  @if ($profession->current_latitude != null && $profession->current_longitude != null) target="_blank" @endif href="{{$url}}" style="color:blue;"> <b><em>Locate Now</em></b></a><strong class="text-dark"> ({{$profession->distance??'0'.' KM'??''}}) </strong></li>
                                            <li><span class="bi bi-telephone-fill text-primary"> : <a href="tel:{{$profession->phone??''}}" class="text-decoration-none text-dark">{{$profession->phone??'N/A'}}</a></li>
                                         </ul>
                                      </div>

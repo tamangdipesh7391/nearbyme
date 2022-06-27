@@ -40,6 +40,8 @@
 <script src="{{url('dist/js/demo.js')}}"></script>
 <script src="{{url('dist/js/pages/dashboard.js')}}"></script>
 <script src="{{ asset('ckeditor/ckeditor.js') }}"></script>
+{{-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> --}}
+
 <script>
 CKEDITOR.replace( 'ck_description', {
     filebrowserUploadUrl: "{{route('upload', ['_token' => csrf_token() ])}}",
