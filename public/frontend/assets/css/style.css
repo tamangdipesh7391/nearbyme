@@ -65,7 +65,7 @@ section {
 }
 
 .section {
-  padding: 7rem 0;
+  padding: 5rem 0;
 }
 
 .section-heading {
@@ -757,10 +757,11 @@ section {
 }
 .hero-section, .hero-section > .container > .row {
   height: 100vh;
-  min-height: 880px;
+  /* min-height: 880px; */
+  min-height: 915px;
 }
 .hero-section.inner-page {
-  height: 60vh;
+  height: 12vh;
   min-height: 0;
 }
 .hero-section.inner-page .hero-text {

@@ -32,7 +32,9 @@
           <th>Profession</th>
           <th>Status</th>
           <th>Requested Date</th>
+          @if ($requested_services[0]->status == 'pending')  
           <th>Actions</th>
+            @endif
         </tr>
         @foreach ($requested_services as $key => $request)
         <tr>
@@ -51,10 +53,13 @@
 
           </td>
             <td>{{ $request->created_at }}</td>
-          <td>
+        
+            @if ($request->status == 'pending') 
+              <td> 
             <a href="{{route('user.request.manage',$request->id)}}" class="btn btn-warning btn-sm">Cancel</a>
             <a onclick="return confirm('Are you sure?')" href="{{ route('user.request.soft_delete', $request->id) }}" class="btn btn-danger btn-sm">Delete</a>
-          </td>
+         
+        </td> @endif
         </tr>
         @endforeach
       </table>
@@ -116,7 +121,7 @@
             <th>Profession</th>
             <th>Status</th>
             <th>Requested Date</th>
-            <th>Actions</th>
+           
             </tr>
             @foreach ($confirmed_services as $key => $request)
             <tr>
@@ -135,9 +140,7 @@
     
             </td>
                 <td>{{ $request->created_at }}</td>
-            <td>
-                <a onclick="return confirm('Are you sure?')" href="{{ route('user.request.soft_delete', $request->id) }}" class="btn btn-danger btn-sm">Delete</a>
-            </td>
+           
             </tr>
             @endforeach
         </table>
@@ -157,7 +160,7 @@
             <th>Profession</th>
             <th>Status</th>
             <th>Requested Date</th>
-            <th>Actions</th>
+            {{-- <th>Action</th> --}}
             </tr>
             @foreach ($rejected_services as $key => $request)
             <tr>
@@ -176,9 +179,9 @@
     
             </td>
                 <td>{{ $request->created_at }}</td>
-            <td>
+            {{-- <td>
                 <a onclick="return confirm('Are you sure?')" href="{{ route('user.request.soft_delete', $request->id) }}" class="btn btn-danger btn-sm">Delete</a>
-            </td>
+            </td> --}}
             </tr>
             @endforeach
         </table>
@@ -198,7 +201,7 @@
             <th>Profession</th>
             <th>Status</th>
             <th>Requested Date</th>
-            <th>Actions</th>
+            {{-- <th>Actions</th> --}}
             </tr>
             @foreach ($canceled_services as $key => $request)
             <tr>
@@ -217,9 +220,9 @@
     
             </td>
                 <td>{{ $request->created_at }}</td>
-            <td>
+            {{-- <td>
                 <a onclick="return confirm('Are you sure?')" href="{{ route('user.request.soft_delete', $request->id) }}" class="btn btn-danger btn-sm">Delete</a>
-            </td>
+            </td> --}}
             </tr>
             @endforeach
         </table>

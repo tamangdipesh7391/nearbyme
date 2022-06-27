@@ -22,10 +22,10 @@
         
           <div class="row">
             <div class="col-lg-8 text-center text-lg-start">
-              <form action="{{route('home.search')}}" class="form-group mb-2 rounded d-flex" method="POST">
+              <form action="{{route('home.search')}}" class="form-group mb-2 rounded d-flex home-search-form" method="POST">
                 @csrf
-                <input required name="search" placeholder="Start searching here ..." type="search" id="home_search" class="form-control" style="border-top-left-radius: 10px;border-bottom-left-radius: 10px;width:60%;border:2px solid blue;">
-                <input type="submit" class="form-control" value="Search" style="border-top-right-radius: 10px;border-bottom-right-radius: 10px;width:20%;border:2px solid green;">
+                <input required name="search" placeholder="Start searching here ..." type="search" id="home_search" class="form-control" >
+                <input type="submit" class="form-control" value="Search" id="home_search_submit_btn">
               </form>
               <h1 data-aos="fade-right">Save your time by using NearByMe</h1>
               <p class="mb-5" data-aos="fade-right" data-aos-delay="100">
@@ -48,15 +48,16 @@
   </section><!-- End Hero -->
  @if (count($professions) > 0)
     <!-- ======= Home Section ======= -->
-    <section class="section" id="services">
+   
+
+    <section class="section profession-section" id="services">
       <div class="container">
-
-        <div class="row justify-content-center text-center mb-5">
-          <div class="col-md-5" data-aos="fade-up">
-            <h2 class="section-heading">Save your time by using NearByMe</h2>
+      <div class="row justify-content-center mb-2">
+            <div class="col-md-12" data-aos="fade-up">
+              <h2 class="section-heading">Available Services</h2><hr>
+            </div>
           </div>
-        </div>
-
+       
         <div class="row">
          
             @foreach ($professions as $profession)
@@ -94,11 +95,12 @@
       
         <div class="row align-items-center">
           <div class="col-md-6 me-auto text-center text-md-start mb-5 mb-md-0">
-            <h2>Start Using our Platform</h2>
+            <h2 class="get-started-text">Start Using our Platform</h2>
           </div>
           <div class="col-md-5 text-center text-md-end">
-            <p><a href="#" class="btn btn-outline-info d-inline-flex align-items-center"><i class="bi bi-people-fill"></i><span>Sell Service</span></a> 
-              <a href="#" class="btn btn-outline-info d-inline-flex align-items-center"><i class="bi bi-people"></i><span>Use Service</span></a></p>
+            <p>
+              <a href="#" class="btn get-started-btns btn-outline-info d-inline-flex align-items-center"><i class="bi bi-people-fill"></i><span>Sell Service</span></a> 
+              <a href="#" class="btn get-started-btns btn-outline-info d-inline-flex align-items-center"><i class="bi bi-people"></i><span>Use Service</span></a></p>
           </div>
         </div>
       </div>

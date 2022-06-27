@@ -18,7 +18,7 @@
       <a class="nav-link " id="nav-home-tab" data-toggle="tab" href="#nav-pending" role="tab" aria-controls="nav-home" aria-selected="true">Pending</a>
       <a class="nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-confirmed" role="tab" aria-controls="nav-contact" aria-selected="false">Confirmed</a>
       <a class="nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-rejected" role="tab" aria-controls="nav-contact" aria-selected="false">Rejected</a>
-      <a class="nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-trashed" role="tab" aria-controls="nav-contact" aria-selected="false">Trashed</a>
+      <a class="nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-cancelled" role="tab" aria-controls="nav-contact" aria-selected="false">Cancelled</a>
     </div>
   </nav>
   <div class="tab-content" id="nav-tabContent">
@@ -31,7 +31,7 @@
           <th>Location</th>
           <th>Status</th>
           <th>Requested Date</th>
-          <th>Actions</th>
+          {{-- <th>Actions</th> --}}
         </tr>
         @foreach ($requested_services as $key => $request)
         <tr>
@@ -53,15 +53,17 @@
          
           <td>
             @if($request->status == 'pending')
-           <button data-toggle="modal" data-target="#newModal{{$key}}" class=" btn btn-sm btn-warning">{{ $request->status }}</button>
+           <button data-toggle="modal" data-target="#allModal{{$key}}" class=" btn btn-sm btn-warning">{{ $request->status }}</button>
             @elseif($request->status == 'confirmed')
-           <button data-toggle="modal" data-target="#newModal{{$key}}" class="btn btn-sm btn-success">{{ $request->status }}</button>
-            @elseif($request->status == 'rejected')
-           <button data-toggle="modal" data-target="#newModal{{$key}}" class="btn btn-sm btn-danger">{{ $request->status }}</button>
+           <button data-toggle="modal" data-target="#allModal{{$key}}" class="btn btn-sm btn-success">{{ $request->status }}</button>
+           @elseif($request->status == 'rejected')
+           <button data-toggle="modal" data-target="#allModal{{$key}}" class="btn btn-sm btn-danger">{{ $request->status }}</button> 
+            @elseif($request->status == 'cancelled')
+           <button data-toggle="modal" data-target="#allModal{{$key}}" class="btn btn-sm btn-danger">{{ $request->status }}</button>
             @endif
 
             {{-- modal start --}}
-            <div class="modal fade" id="newModal{{$key}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal fade" id="allModal{{$key}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
               <div class="modal-dialog">
                 <div class="modal-content">
                   <div class="modal-header">
@@ -78,8 +80,9 @@
                        
                         <select name="status" id="status" class="form-control">
                           <option value="pending" @if ($request->status == 'pending') selected @endif>Pending</option>
-                          <option value="confirmed" @if ($request->status == 'confirmed') selected @endif>Confirmed</option>
-                          <option value="rejected" @if ($request->status == 'rejected') selected @endif>Rejected</option>
+                          <option value="confirmed" @if ($request->status == 'confirmed') selected @endif>Confirm</option>
+                          <option value="rejected" @if ($request->status == 'rejected') selected @endif>Reject</option>
+                          <option value="cancelled" @if ($request->status == 'cancelled') selected @endif>Cancel</option>
                         </select>
                    
                   </div>
@@ -94,9 +97,9 @@
             {{-- modal end --}}
           </td>
             <td>{{ $request->created_at }}</td>
-          <td>
+          {{-- <td>
             <a onclick="return confirm('Are you sure?')" href="{{ route('provider.request.soft_delete', $request->id) }}" class="btn btn-danger btn-sm">Delete</a>
-          </td>
+          </td> --}}
         </tr>
         @endforeach
       </table>
@@ -115,7 +118,7 @@
             <th>Location</th>
             <th>Status</th>
             <th>Requested Date</th>
-            <th>Actions</th>
+            {{-- <th>Actions</th> --}}
             </tr>
             @foreach ($pending_services as $key => $request)
             <tr>
@@ -134,19 +137,54 @@
             <a href="{{ $url }}" target="_blank">Follow Link</a></td>
             
             <td>
-                @if($request->status == 'pending')
-                <span class="badge badge-warning">Pending</span>
-                @elseif($request->status == 'confirmed')
-                <span class="badge badge-success">Confirmed</span>
-                @elseif($request->status == 'rejected')
-                <span class="badge badge-danger">Rejected</span>
-                @endif
-    
+              @if($request->status == 'pending')
+             <button data-toggle="modal" data-target="#pendingModal{{$key}}" class=" btn btn-sm btn-warning">{{ $request->status }}</button>
+              @elseif($request->status == 'confirmed')
+             <button data-toggle="modal" data-target="#pendingModal{{$key}}" class="btn btn-sm btn-success">{{ $request->status }}</button>
+             @elseif($request->status == 'rejected')
+             <button data-toggle="modal" data-target="#pendingModal{{$key}}" class="btn btn-sm btn-danger">{{ $request->status }}</button> 
+              @elseif($request->status == 'cancelled')
+             <button data-toggle="modal" data-target="#pendingModal{{$key}}" class="btn btn-sm btn-danger">{{ $request->status }}</button>
+              @endif
+  
+              {{-- modal start --}}
+              <div class="modal fade" id="pendingModal{{$key}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">Choose status</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <form action="{{route('provider.request.manage',$request->id)}}" method="POST">
+                    <div class="modal-body">
+                        @csrf
+                        @method('PATCH')
+                        <div class="form-group">
+                         
+                          <select name="status" id="status" class="form-control">
+                            <option value="pending" @if ($request->status == 'pending') selected @endif>Pending</option>
+                            <option value="confirmed" @if ($request->status == 'confirmed') selected @endif>Confirm</option>
+                            <option value="rejected" @if ($request->status == 'rejected') selected @endif>Reject</option>
+                            <option value="cancelled" @if ($request->status == 'cancelled') selected @endif>Cancel</option>
+                          </select>
+                     
+                    </div>
+                    <div class="modal-footer">
+                      <button type="submit" class="btn btn-primary">Change Status</button>
+                    </div>
+                   </form>
+                  </div>
+                </div>
+              </div>
+              
+              {{-- modal end --}}
             </td>
                 <td>{{ $request->created_at }}</td>
-            <td>
+            {{-- <td>
                 <a onclick="return confirm('Are you sure?')" href="{{ route('provider.request.soft_delete', $request->id) }}" class="btn btn-danger btn-sm">Delete</a>
-            </td>
+            </td> --}}
             </tr>
             @endforeach
         </table>
@@ -167,7 +205,7 @@
             <th>Location</th>
             <th>Status</th>
             <th>Requested Date</th>
-            <th>Actions</th>
+            {{-- <th>Actions</th> --}}
             </tr>
             @foreach ($confirmed_services as $key => $request)
             <tr>
@@ -186,19 +224,54 @@
             <a href="{{ $url }}" target="_blank">Follow Link</a></td>
             
             <td>
-                @if($request->status == 'pending')
-                <span class="badge badge-warning">Pending</span>
-                @elseif($request->status == 'confirmed')
-                <span class="badge badge-success">Confirmed</span>
-                @elseif($request->status == 'rejected')
-                <span class="badge badge-danger">Rejected</span>
-                @endif
-    
+              @if($request->status == 'pending')
+             <button data-toggle="modal" data-target="#confirmedModal{{$key}}" class=" btn btn-sm btn-warning">{{ $request->status }}</button>
+              @elseif($request->status == 'confirmed')
+             <button data-toggle="modal" data-target="#confirmedModal{{$key}}" class="btn btn-sm btn-success">{{ $request->status }}</button>
+             @elseif($request->status == 'rejected')
+             <button data-toggle="modal" data-target="#confirmedModal{{$key}}" class="btn btn-sm btn-danger">{{ $request->status }}</button> 
+              @elseif($request->status == 'cancelled')
+             <button data-toggle="modal" data-target="#confirmedModal{{$key}}" class="btn btn-sm btn-danger">{{ $request->status }}</button>
+              @endif
+  
+              {{-- modal start --}}
+              <div class="modal fade" id="confirmedModal{{$key}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">Choose status</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <form action="{{route('provider.request.manage',$request->id)}}" method="POST">
+                    <div class="modal-body">
+                        @csrf
+                        @method('PATCH')
+                        <div class="form-group">
+                         
+                          <select name="status" id="status" class="form-control">
+                            <option value="pending" @if ($request->status == 'pending') selected @endif>Pending</option>
+                            <option value="confirmed" @if ($request->status == 'confirmed') selected @endif>Confirm</option>
+                            <option value="rejected" @if ($request->status == 'rejected') selected @endif>Reject</option>
+                            <option value="cancelled" @if ($request->status == 'cancelled') selected @endif>Cancel</option>
+                          </select>
+                     
+                    </div>
+                    <div class="modal-footer">
+                      <button type="submit" class="btn btn-primary">Change Status</button>
+                    </div>
+                   </form>
+                  </div>
+                </div>
+              </div>
+              
+              {{-- modal end --}}
             </td>
                 <td>{{ $request->created_at }}</td>
-            <td>
+            {{-- <td>
                 <a onclick="return confirm('Are you sure?')" href="{{ route('provider.request.soft_delete', $request->id) }}" class="btn btn-danger btn-sm">Delete</a>
-            </td>
+            </td> --}}
             </tr>
             @endforeach
         </table>
@@ -218,7 +291,7 @@
             <th>Location</th>
             <th>Status</th>
             <th>Requested Date</th>
-            <th>Actions</th>
+            {{-- <th>Actions</th> --}}
             </tr>
             @foreach ($rejected_services as $key => $request)
             <tr>
@@ -237,19 +310,54 @@
             <a href="{{ $url }}" target="_blank">Follow Link</a></td>
             
             <td>
-                @if($request->status == 'pending')
-                <span class="badge badge-warning">Pending</span>
-                @elseif($request->status == 'confirmed')
-                <span class="badge badge-success">Confirmed</span>
-                @elseif($request->status == 'rejected')
-                <span class="badge badge-danger">Rejected</span>
-                @endif
-    
+              @if($request->status == 'pending')
+             <button data-toggle="modal" data-target="#rejectedModal{{$key}}" class=" btn btn-sm btn-warning">{{ $request->status }}</button>
+              @elseif($request->status == 'confirmed')
+             <button data-toggle="modal" data-target="#rejectedModal{{$key}}" class="btn btn-sm btn-success">{{ $request->status }}</button>
+             @elseif($request->status == 'rejected')
+             <button data-toggle="modal" data-target="#rejectedModal{{$key}}" class="btn btn-sm btn-danger">{{ $request->status }}</button> 
+              @elseif($request->status == 'cancelled')
+             <button data-toggle="modal" data-target="#rejectedModal{{$key}}" class="btn btn-sm btn-danger">{{ $request->status }}</button>
+              @endif
+  
+              {{-- modal start --}}
+              <div class="modal fade" id="rejectedModal{{$key}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">Choose status</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <form action="{{route('provider.request.manage',$request->id)}}" method="POST">
+                    <div class="modal-body">
+                        @csrf
+                        @method('PATCH')
+                        <div class="form-group">
+                         
+                          <select name="status" id="status" class="form-control">
+                            <option value="pending" @if ($request->status == 'pending') selected @endif>Pending</option>
+                            <option value="confirmed" @if ($request->status == 'confirmed') selected @endif>Confirm</option>
+                            <option value="rejected" @if ($request->status == 'rejected') selected @endif>Reject</option>
+                            <option value="cancelled" @if ($request->status == 'cancelled') selected @endif>Cancel</option>
+                          </select>
+                     
+                    </div>
+                    <div class="modal-footer">
+                      <button type="submit" class="btn btn-primary">Change Status</button>
+                    </div>
+                   </form>
+                  </div>
+                </div>
+              </div>
+              
+              {{-- modal end --}}
             </td>
                 <td>{{ $request->created_at }}</td>
-            <td>
+            {{-- <td>
                 <a onclick="return confirm('Are you sure?')" href="{{ route('provider.request.soft_delete', $request->id) }}" class="btn btn-danger btn-sm">Delete</a>
-            </td>
+            </td> --}}
             </tr>
             @endforeach
         </table>
@@ -261,8 +369,8 @@
       </div>
   
      
-    <div class="tab-pane fade" id="nav-trashed" role="tabpanel" aria-labelledby="nav-contact-tab">
-        @if (count($trashed_services) > 0)
+    <div class="tab-pane fade" id="nav-cancelled" role="tabpanel" aria-labelledby="nav-contact-tab">
+        @if (count($cancelled_services) > 0)
         <table class="table table-bordered table-hover">
             <tr>
             <th>SN</th>
@@ -270,9 +378,9 @@
             <th>Location</th>
             <th>Status</th>
             <th>Requested Date</th>
-            <th>Actions</th>
+            {{-- <th>Actions</th> --}}
             </tr>
-            @foreach ($trashed_services as $key => $request)
+            @foreach ($cancelled_services as $key => $request)
             <tr>
             <td>{{ ++$key }}</td>
             <td>{{ $request->user->name }}</td>
@@ -289,21 +397,56 @@
             <a href="{{ $url }}" target="_blank">Follow Link</a></td>
             
             <td>
-                @if($request->status == 'pending')
-                <span class="badge badge-warning">Pending</span>
-                @elseif($request->status == 'confirmed')
-                <span class="badge badge-success">Confirmed</span>
-                @elseif($request->status == 'rejected')
-                <span class="badge badge-danger">Rejected</span>
-                @endif
-    
+              @if($request->status == 'pending')
+             <button data-toggle="modal" data-target="#cancelledModal{{$key}}" class=" btn btn-sm btn-warning">{{ $request->status }}</button>
+              @elseif($request->status == 'confirmed')
+             <button data-toggle="modal" data-target="#cancelledModal{{$key}}" class="btn btn-sm btn-success">{{ $request->status }}</button>
+             @elseif($request->status == 'rejected')
+             <button data-toggle="modal" data-target="#cancelledModal{{$key}}" class="btn btn-sm btn-danger">{{ $request->status }}</button> 
+              @elseif($request->status == 'cancelled')
+             <button data-toggle="modal" data-target="#cancelledModal{{$key}}" class="btn btn-sm btn-danger">{{ $request->status }}</button>
+              @endif
+  
+              {{-- modal start --}}
+              <div class="modal fade" id="cancelledModal{{$key}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">Choose status</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <form action="{{route('provider.request.manage',$request->id)}}" method="POST">
+                    <div class="modal-body">
+                        @csrf
+                        @method('PATCH')
+                        <div class="form-group">
+                         
+                          <select name="status" id="status" class="form-control">
+                            <option value="pending" @if ($request->status == 'pending') selected @endif>Pending</option>
+                            <option value="confirmed" @if ($request->status == 'confirmed') selected @endif>Confirm</option>
+                            <option value="rejected" @if ($request->status == 'rejected') selected @endif>Reject</option>
+                            <option value="cancelled" @if ($request->status == 'cancelled') selected @endif>Cancel</option>
+                          </select>
+                     
+                    </div>
+                    <div class="modal-footer">
+                      <button type="submit" class="btn btn-primary">Change Status</button>
+                    </div>
+                   </form>
+                  </div>
+                </div>
+              </div>
+              
+              {{-- modal end --}}
             </td>
                 <td>{{ $request->created_at }}</td>
-            <td>
+            {{-- <td>
                 <a onclick="return confirm('Are you sure?')" href="{{ route('provider.request.restore', $request->id) }}" class="btn btn-danger btn-sm">Restore</a>
 
                 <a onclick="return confirm('Are you sure?')" href="{{ route('provider.request.delete', $request->id) }}" class="btn btn-danger btn-sm">Delete</a>
-            </td>
+            </td> --}}
             </tr>
             @endforeach
         </table>

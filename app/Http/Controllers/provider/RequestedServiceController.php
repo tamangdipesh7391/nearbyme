@@ -88,8 +88,8 @@ class RequestedServiceController extends Controller
         $pending_services = RequestedService::where('provider_id', $id)->where('status', 'pending')->get();
         $confirmed_services = RequestedService::where('provider_id', $id)->where('status', 'confirmed')->get();
         $rejected_services = RequestedService::where('provider_id', $id)->where('status', 'rejected')->get();
-        $trashed_services = RequestedService::where('provider_id', $id)->onlyTrashed()->get();
-        return view('provider.pages.provider.requestList', compact('requested_services', 'pending_services', 'confirmed_services', 'rejected_services', 'trashed_services'));
+        $cancelled_services = RequestedService::where('provider_id', $id)->where('status', 'cancelled')->get();
+        return view('provider.pages.provider.requestList', compact('requested_services', 'pending_services', 'confirmed_services', 'rejected_services', 'cancelled_services'));
     }
     public function softDeleteRequest($id){
         $requested_service = RequestedService::find($id);
