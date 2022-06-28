@@ -5,6 +5,8 @@ namespace App\Http\Controllers\user;
 use App\Http\Controllers\Controller;
 use App\Models\RequestedService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
+
 
 class RequestedServiceController extends Controller
 {
@@ -83,14 +85,42 @@ class RequestedServiceController extends Controller
     {
         //
     }
-    public function requestHistory($id){
+    public function requestHistory($id,$hid = null){
+
+        // hilight row logic 
+        $hilight_id = $hid;
+        if($hid != null){
+            $requested_service = RequestedService::find($hid);
+            $requested_service->is_seen = 1;
+            $requested_service->save();
+            $hilight_id = $hid;
+        }
+        //notification logic
+        $user_notification_msg = [];
+        $user_notification_count = 0;
+        $request_notifications = RequestedService::where('user_id','=',Session::get('session_user')->id)->where('is_seen','=',0)->limit(5)->get();
+        $user_notification_count = RequestedService::where('user_id','=',Session::get('session_user')->id)->where('is_seen','=',0)->count();
+        foreach($request_notifications as $key => $request_notification){
+           if($request_notification->status == 'confirmed'){
+                $user_notification_msg[$key]['status'] = 'confirmed';
+                $user_notification_msg[$key]['notification_id'] = $request_notification->id;
+                $user_notification_msg[$key]['message'][$key] = 'Your request has been confirmed by '.$request_notification->provider->name;
+                $user_notification_msg[$key]['time_ago'][$key] = strtotime($request_notification->created_at);
+            }elseif($request_notification->status == 'rejected'){
+                $user_notification_msg[$key]['status'] = 'rejected';
+                $user_notification_msg[$key]['notification_id'] = $request_notification->id;
+                $user_notification_msg[$key]['message'][$key] = 'Your request has been rejected by '.$request_notification->provider->name;
+                $user_notification_msg[$key]['time_ago'][$key] = strtotime($request_notification->created_at);
+            }
+        }
+        //dashboard data
         $requested_services = RequestedService::where('user_id', $id)->where('is_canceled',0)->get();
         $pending_services = RequestedService::where('user_id', $id)->where('status', 'pending')->get();
         $confirmed_services = RequestedService::where('user_id', $id)->where('status', 'confirmed')->get();
         $rejected_services = RequestedService::where('user_id', $id)->where('status', 'rejected')->get();
         $canceled_services = RequestedService::where('user_id', $id)->where('is_canceled', 1)->get();
         $trashed_services = RequestedService::where('user_id', $id)->onlyTrashed()->get();
-        return view('user.pages.user.requestHistory', compact('requested_services', 'pending_services', 'confirmed_services', 'rejected_services', 'trashed_services', 'canceled_services'));
+        return view('user.pages.user.requestHistory', compact('requested_services', 'pending_services', 'confirmed_services', 'rejected_services', 'trashed_services', 'canceled_services', 'user_notification_msg', 'user_notification_count', 'hilight_id'));
     }
     public function softDeleteRequest($id){
         $requested_services = RequestedService::where('id', $id)->first();
@@ -116,6 +146,12 @@ class RequestedServiceController extends Controller
         }
             $requested_services->save();
             return redirect()->back()->with('success', 'Request accepted successfully');
+    }
+    public function providerRating(Request $request,$id){
+        $requested_services = RequestedService::findOrfail($id);
+        $requested_services->rating = request()->rating;
+        $requested_services->save();
+        return redirect()->back()->with('success', 'Rating submitted successfully');
     }
 
 }

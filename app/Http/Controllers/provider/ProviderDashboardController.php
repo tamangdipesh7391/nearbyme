@@ -12,17 +12,35 @@ use Illuminate\Support\Facades\Session;
 class ProviderDashboardController extends Controller
 {
     public function index(){
+        //notification logic
+        $user_notification_msg = [];
+        $user_notification_count = 0;
+        $request_notifications = RequestedService::where('provider_id','=',Session::get('session_provider')->id)->where('is_seen_admin','=',0)->limit(5)->get();
+        $user_notification_count = RequestedService::where('provider_id','=',Session::get('session_provider')->id)->where('is_seen_admin','=',0)->count();
+        foreach($request_notifications as $key => $request_notification){
+                $user_notification_msg[$key]['notification_id'] = $request_notification->id;
+                $user_notification_msg[$key]['message'][$key] = $request_notification->user->name.' has sent you a request';
+                $user_notification_msg[$key]['time_ago'][$key] = strtotime($request_notification->created_at);
+            
+        }
+        //counter logic
         $request_count = RequestedService::where('provider_id','=',Session::get('session_provider')->id)->count();
         $request_count_today = RequestedService::whereDate('created_at', date('Y-m-d'))->where('provider_id','=',Session::get('session_provider')->id)->count();
         $request_count_month = RequestedService::whereMonth('created_at', date('m'))->where('provider_id','=',Session::get('session_provider')->id)->count();
         $request_count_year = RequestedService::whereYear('created_at', date('Y'))->where('provider_id','=',Session::get('session_provider')->id)->count();
         $years = RequestedService::select(DB::raw("DATE_FORMAT(created_at, '%Y-%m') as year"))->groupBy('year')->orderBy('year', 'asc')->get();
         
-        foreach($years as $year){
-            $year_arr[] = $year->year;
+        if($years->count() > 0){
+            foreach($years as $year){
+                $year_arr[] = $year->year;
+            }
+            $year_arr = array_unique($year_arr);
+           
+        }else{
+            $year_arr = array();
         }
-        $year_arr = array_unique($year_arr);
-       
+        
+      
       
         $request = [];
         foreach ($year_arr as $key => $value) {
@@ -35,10 +53,15 @@ class ProviderDashboardController extends Controller
         ->with('request_count_today',$request_count_today)
         ->with('request_count_month',$request_count_month)
         ->with('request_count_year',$request_count_year)
-        ->with('request',json_encode($request,JSON_NUMERIC_CHECK));
+        ->with('request',json_encode($request,JSON_NUMERIC_CHECK))
+        ->with('user_notification_msg',$user_notification_msg)
+        ->with('user_notification_count',$user_notification_count);
     }
     public function login()
     {
+        // if(Session::has('session_provider')){
+        //     return redirect()->route('provider.dashboard');
+        // }
         return view('provider.login');
     }
 

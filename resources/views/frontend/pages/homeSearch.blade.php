@@ -71,17 +71,36 @@
                                              <i class="bi bi-circle-fill text-danger rounded-circle"></i>
                                           @endif
                                        @endif
-                                       <div title="Very bad services. Not recommended">
-                                          <span class="bi bi-star text-warning"></span>
-                                          <span class="bi bi-star text-secondary"></span>
-                                          <span class="bi bi-star text-secondary"></span>
-                                          <span class="bi bi-star text-secondary"></span>
-                                          <span class="bi bi-star text-secondary"></span>
-                                       </div>
+                                       @if ($profession->current_provider_rating == 0)
+                                          <div class="text-danger">Not Rated yet</div>
+                                          @else
+                                          <div>
+                                             <?php
+                                              $primary_stars = $profession->current_provider_rating;
+                                             $secondary_stars = 5 - $primary_stars;
+                                             
+                                             ?>
+
+                                             @if ($primary_stars > 0)
+                                             @for ($i = 0; $i < $primary_stars; $i++)
+                                             <span class="bi bi-star-fill text-warning"></span>
+                                             @endfor
+                                             @endif
+                                             @if ($secondary_stars > 0)
+                                             @for ($i = 0; $i < $secondary_stars; $i++)
+                                             <span class="bi bi-star-fill text-secondary"></span>
+                                             @endfor
+                                             @endif
+                         
+                                          </div>
+                                          
+                                       @endif
                                       
+                                         <div>
                                           <small>
-                                          <span class="bi bi-check-circle-fill text-success"> Verified Profile</span> 
-                                          </small>
+                                             <span class="bi bi-check-circle-fill text-success"> Verified Profile</span> 
+                                             </small>
+                                         </div>
                                       
                                       
                                      </div>
@@ -109,7 +128,14 @@
                                             $url = "https://maps.google.com/?q=".$profession->current_latitude.",".$profession->current_longitude;
                                           @endphp  
                                            @endif
-                                           <li style="font-weight:100"><span class="bi bi-map-fill text-primary"></span> : <a  @if ($profession->current_latitude != null && $profession->current_longitude != null) target="_blank" @endif href="{{$url}}" style="color:blue;"> <b><em>Locate Now</em></b></a><strong class="text-dark"> ({{$profession->distance??'0'.' KM'??''}}) </strong></li>
+                                           @if (isset($profession->distance) || $profession->distance != null || $profession->distance != 0 || $profession->distance != '')
+                                              <li style="font-weight:100">
+                                             <span class="bi bi-map-fill text-primary"></span> :
+                                              <a  @if ($profession->current_latitude != null && $profession->current_longitude != null) target="_blank" @endif href="{{$url}}" style="color:blue;"> 
+                                                <b><em>Locate Now</em></b></a><strong class="text-dark"> ({{$profession->distance .' KM'??'0 KM'}}) </strong>
+                                          </li>
+                                           @endif
+                                           
                                            <li><span class="bi bi-telephone-fill text-primary"> : <a href="tel:{{$profession->phone??''}}" class="text-decoration-none text-dark">{{$profession->phone??'N/A'}}</a></li>
                                         </ul>
                                      </div>

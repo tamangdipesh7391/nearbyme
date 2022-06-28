@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\user;
 
 use App\Http\Controllers\Controller;
+use App\Models\RequestedService;
 use App\Models\User;
 use App\Models\UserTracker;
 use Illuminate\Http\Request;
@@ -45,7 +46,7 @@ class UserController extends Controller
             }
        
         }else{
-            return redirect()->route('admin.login')->with('error','Invalid Credentials');
+            return redirect()->route('user.login')->with('error','Invalid Credentials');
         }
     }
     public function index()
@@ -108,8 +109,27 @@ class UserController extends Controller
      */
     public function edit($id)
     {
+         //notification logic
+         $user_notification_msg = [];
+         $user_notification_count = 0;
+         $request_notifications = RequestedService::where('user_id','=',Session::get('session_user')->id)->where('is_seen','=',1)->limit(5)->get();
+         $user_notification_count = RequestedService::where('user_id','=',Session::get('session_user')->id)->where('is_seen','=',1)->count();
+         foreach($request_notifications as $key => $request_notification){
+            if($request_notification->status == 'confirmed'){
+                 $user_notification_msg[$key]['status'] = 'confirmed';
+                 $user_notification_msg[$key]['notification_id'] = $request_notification->id;
+                 $user_notification_msg[$key]['message'][$key] = 'Your request has been confirmed by '.$request_notification->provider->name;
+                 $user_notification_msg[$key]['time_ago'][$key] = strtotime($request_notification->created_at);
+             }elseif($request_notification->status == 'rejected'){
+                 $user_notification_msg[$key]['status'] = 'rejected';
+                 $user_notification_msg[$key]['notification_id'] = $request_notification->id;
+                 $user_notification_msg[$key]['message'][$key] = 'Your request has been rejected by '.$request_notification->provider->name;
+                 $user_notification_msg[$key]['time_ago'][$key] = strtotime($request_notification->created_at);
+             }
+         }
+            //end notification logic
         $user = User::findOrfail($id);
-        return view('user.pages.user.edit',compact('user'));
+        return view('user.pages.user.edit',compact('user','user_notification_msg','user_notification_count'));
     }
 
     /**

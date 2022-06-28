@@ -5,10 +5,12 @@ namespace App\Http\Controllers\provider;
 use App\Http\Controllers\Controller;
 use App\Models\Profession;
 use App\Models\ProviderTracker;
+use App\Models\RequestedService;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 use Stevebauman\Location\Facades\Location;
 
 
@@ -47,7 +49,7 @@ class ProviderController extends Controller
             }
        
         }else{
-            return redirect()->route('admin.login')->with('error','Invalid Credentials');
+            return redirect()->route('provider.login')->with('error','Invalid Credentials');
         }
     }
     public function index()
@@ -62,6 +64,9 @@ class ProviderController extends Controller
      */
     public function create()
     {
+        // if(Session::has('session_provider')){
+        //     return redirect()->route('provider.dashboard');
+        // }
         $professions = Profession::where('status', 1)->get();
         return view('provider.register',['professions' => $professions]);
     }
@@ -113,9 +118,21 @@ class ProviderController extends Controller
      */
     public function edit($id)
     {
+         //notification logic
+         $user_notification_msg = [];
+         $user_notification_count = 0;
+         $request_notifications = RequestedService::where('provider_id','=',Session::get('session_provider')->id)->where('is_seen_admin','=',0)->limit(5)->get();
+         $user_notification_count = RequestedService::where('provider_id','=',Session::get('session_provider')->id)->where('is_seen_admin','=',0)->count();
+         foreach($request_notifications as $key => $request_notification){
+                 $user_notification_msg[$key]['notification_id'] = $request_notification->id;
+                 $user_notification_msg[$key]['message'][$key] = $request_notification->user->name.' has sent you a request';
+                 $user_notification_msg[$key]['time_ago'][$key] = strtotime($request_notification->created_at);
+             
+         }
+            //end notification logic
         $provider = User::findOrfail($id);
         $professions = Profession::where('status', 1)->get();
-        return view('provider.pages.provider.edit',['provider' => $provider, 'professions' => $professions]);
+        return view('provider.pages.provider.edit',['provider' => $provider, 'professions' => $professions, 'user_notification_msg' => $user_notification_msg, 'user_notification_count' => $user_notification_count]);
 
 
     }

@@ -87,11 +87,11 @@
                             <button type="submit" class="btn btn-primary btn-block mb-4">
                                 Proceed to Login
                             </button>
-                            <div class="text-center">
+                            {{-- <div class="text-center">
                                 <small class="text-muted">
                                     Don't have an account? <a href="{{route('admins.create')}}">Sign up Now</a>
                                 </small>
-                            </div>
+                            </div> --}}
 
 
                         </form>

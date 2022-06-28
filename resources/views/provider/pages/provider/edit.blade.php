@@ -103,10 +103,14 @@
                                     <input type="file" class="form-control" id="citizenship" name="citizenship">
                                    
                                 </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4">
-                                    <label for="">&nbsp;</label>
-                                    <p><a class="btn btn-outline-primary" data-toggle="modal" data-target="#viewCitizenship" >View Citizenship</a></p>
-                                </div>
+                               @if ($provider->citizenship != null)
+                               <div class="col-lg-4 col-md-4 col-sm-4">
+                                <label for="">&nbsp;</label>
+                                <p><a class="btn btn-outline-primary" data-toggle="modal" data-target="#viewCitizenship" >View Citizenship</a></p>
+                                 </div>
+                              
+                                   
+                               @endif
                             </div>
                             @if ($provider->citizenship != null)
                             <div class="modal fade" id="viewCitizenship" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

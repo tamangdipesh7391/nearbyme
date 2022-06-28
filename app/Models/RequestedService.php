@@ -15,7 +15,9 @@ class RequestedService extends Model
         'user_latitude',
         'user_longitude',
         'status',
-        'is_canceled'
+        'is_canceled',
+        'is_seen',
+        'is_seen_admin',
     ];
     public function provider()
     {

@@ -21,6 +21,9 @@ class CreateRequestedServicesTable extends Migration
             $table->string('user_longitude')->nullable();
             $table->enum('status',['pending','confirmed','rejected','cancelled'])->default('pending');
             $table->boolean('is_canceled')->default(0);
+            $table->boolean('is_seen')->default(1);
+            $table->boolean('is_seen_admin')->default(0);
+            $table->integer('rating')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

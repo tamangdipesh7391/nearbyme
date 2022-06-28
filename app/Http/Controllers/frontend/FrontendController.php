@@ -24,6 +24,7 @@ class FrontendController extends Controller
     }
     public function homeSearch(Request $request)
     {
+
         if(isset(Session::get('session_user')->id)){
             $current_user_id = Session::get('session_user')->id;
             $current_user_location = UserTracker::where('user_id', $current_user_id)->first();
@@ -40,19 +41,30 @@ class FrontendController extends Controller
                 'professions.avatar as profession_avatar',
                 'users.name as user_name',
                 'users.avatar as user_avatar',
+                'users.id as this_provider_id',
                 'professions.*',
                 'users.*',
                 'provider_trackers.*'
             ]);
            
-    
+            foreach ($professions as $key => $value) {
+                $current_provider_rating_sum = RequestedService::where('provider_id', $value->this_provider_id)->sum('rating');
+                $divideBy = RequestedService::where('provider_id', $value->this_provider_id)->count();
+                if($divideBy == 0){
+                    $divideBy = 1;
+                }
+                $current_provider_rating_count = round($current_provider_rating_sum / $divideBy);
+                $professions[$key]->current_provider_rating = $current_provider_rating_count;
+            }
+           
+
         for($i = 0; $i < count($professions); $i++) {
             $professions[$i]['current_user_lattitude'] = $current_user_lat;
             $professions[$i]['current_user_longitude'] = $current_user_lng; 
             $distance = $this->calc_distance_in_mile($current_user_lat, $current_user_lng, $professions[$i]->current_latitude, $professions[$i]->current_longitude);
+
             $professions[$i]['distance'] = $distance+$i;  
          }
-        //  dd($professions);
         return view('frontend.pages.homeSearch', compact('professions'));
         }else{
             $professions = User::join('professions', 'users.profession_id', '=', 'professions.id')
@@ -66,11 +78,13 @@ class FrontendController extends Controller
                 'professions.avatar as profession_avatar',
                 'users.name as user_name',
                 'users.avatar as user_avatar',
+                'users.id as this_provider_id',
                 'professions.*',
                 'users.*',
                 'provider_trackers.*'
             ]);
-           
+
+        //    dd($professions);
             return view('frontend.pages.homeSearch', compact('professions'));
 
 

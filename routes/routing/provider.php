@@ -16,7 +16,7 @@ Route::group(['prefix' => 'provider-panel'],function(){
         Route::get('/logout',[ProviderDashboardController::class,'logout'])->name('provider.logout');
         Route::get('/',[ProviderDashboardController::class,'index'])->name('provider.dashboard');
         Route::post('ckeditor/image_upload', [CkeditorController::class,'upload'])->name('upload');
-        Route::get('/request-list/{id}',[RequestedServiceController::class,'requestList'])->name('provider.requestList');
+        Route::get('/request-list/{id}/{hid?}',[RequestedServiceController::class,'requestList'])->name('provider.requestList');
         Route::get('/request-list/soft_delete/{id}',[RequestedServiceController::class,'softDeleteRequest'])->name('provider.request.soft_delete');
         Route::get('/request-list/restore/{id}',[RequestedServiceController::class,'restoreRequest'])->name('provider.request.restore');
         Route::get('/request-list/delete/{id}',[RequestedServiceController::class,'deleteRequest'])->name('provider.request.delete');
