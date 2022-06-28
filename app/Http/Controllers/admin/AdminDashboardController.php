@@ -20,11 +20,15 @@ class AdminDashboardController extends Controller
         $request_count_month = RequestedService::whereMonth('created_at', date('m'))->count();
         $request_count_year = RequestedService::whereYear('created_at', date('Y'))->count();
         $years = User::select(DB::raw("DATE_FORMAT(created_at, '%Y-%m') as year"))->groupBy('year')->orderBy('year', 'asc')->get();
-        
-        foreach($years as $year){
-            $year_arr[] = $year->year;
+        if($years->count() > 0){
+            foreach($years as $year){
+                $year_arr[] = $year->year;
+            }
+            $year_arr = array_unique($year_arr);
+           
+        }else{
+            $year_arr = array();
         }
-        $year_arr = array_unique($year_arr);
        
         $user = [];
         $provider = [];
