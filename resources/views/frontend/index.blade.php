@@ -24,7 +24,14 @@
             <div class="col-lg-8 text-center text-lg-start">
               <form action="{{route('home.search')}}" class="form-group mb-2 rounded d-flex home-search-form" method="POST">
                 @csrf
-                <input required name="search" placeholder="Start searching here ..." type="search" id="home_search" class="form-control" >
+                {{-- <input required name="search" placeholder="Start searching here ..." type="search" id="home_search" class="form-control" > --}}
+                <select name="search" id="home_search" class="form-control">
+                  <option selected disabled>Choose any service</option>
+                  @foreach ($search_options as $option)
+                  <option value="{{$option->name}}">{{$option->name}}</option>
+                  
+                @endforeach
+                </select>
                 <input type="submit" class="form-control" value="Search" id="home_search_submit_btn">
               </form>
               <h1 data-aos="fade-right">Save your time by using NearByMe</h1>
@@ -46,7 +53,7 @@
     </div>
 
   </section><!-- End Hero -->
- @if (count($professions) > 0)
+  @if (count($professions) > 0)
     <!-- ======= Home Section ======= -->
    
 
@@ -87,6 +94,10 @@
 
       </div>
     </section>
+    
+    @else
+     <h2 class="text-center text-danger">No service available at this moment</h2><hr>
+   
   @endif
  
     <!-- ======= CTA Section ======= -->
@@ -99,8 +110,8 @@
           </div>
           <div class="col-md-5 text-center text-md-end">
             <p>
-              <a href="{{url('provider-panel/login')}}" class="btn get-started-btns btn-outline-info d-inline-flex align-items-center"><i class="bi bi-people-fill"></i><span>Sell Service</span></a> 
-              <a href="{{url('user-panel/login')}}" class="btn get-started-btns btn-outline-info d-inline-flex align-items-center"><i class="bi bi-people"></i><span>Use Service</span></a></p>
+              <a href="{{url('provider-panel/login')}}" class="btn get-started-btns btn-outline-info d-inline-flex align-items-center"><i class="bi bi-people-fill"></i><span>Service Provider</span></a> 
+              <a href="{{url('user-panel/login')}}" class="btn get-started-btns btn-outline-info d-inline-flex align-items-center"><i class="bi bi-people"></i><span>Service User</span></a></p>
           </div>
         </div>
       </div>

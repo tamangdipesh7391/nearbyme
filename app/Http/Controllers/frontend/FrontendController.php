@@ -19,11 +19,14 @@ class FrontendController extends Controller
      */
     public function index()
     {
+        $search_options = Profession::where('status', 1)->get();
+
         $professions = Profession::where('status', 1)->paginate(6);
-        return view('frontend.index', compact('professions'));
+        return view('frontend.index', compact('professions', 'search_options'));
     }
     public function homeSearch(Request $request)
     {
+        $search_options = Profession::where('status', 1)->get();
 
         if(isset(Session::get('session_user')->id)){
             $current_user_id = Session::get('session_user')->id;
@@ -56,16 +59,19 @@ class FrontendController extends Controller
                 $current_provider_rating_count = round($current_provider_rating_sum / $divideBy);
                 $professions[$key]->current_provider_rating = $current_provider_rating_count;
             }
-           
 
         for($i = 0; $i < count($professions); $i++) {
             $professions[$i]['current_user_lattitude'] = $current_user_lat;
             $professions[$i]['current_user_longitude'] = $current_user_lng; 
-            $distance = $this->calc_distance_in_mile($current_user_lat, $current_user_lng, $professions[$i]->current_latitude, $professions[$i]->current_longitude);
+            if($current_user_lat != null && $current_user_lng != null && $professions[$i]->current_latitude != null && $professions[$i]->current_longitude != null){
+                    $distance = $this->calc_distance_in_mile($current_user_lat, $current_user_lng, $professions[$i]->current_latitude, $professions[$i]->current_longitude);
 
-            $professions[$i]['distance'] = $distance+$i;  
+                                $professions[$i]['distance'] = $distance+$i;
+                            }
+               
          }
-        return view('frontend.pages.homeSearch', compact('professions'));
+        //  dd($professions);
+        return view('frontend.pages.homeSearch', compact('professions', 'search_options'));
         }else{
             $professions = User::join('professions', 'users.profession_id', '=', 'professions.id')
             ->join('provider_trackers', 'users.id', '=', 'provider_trackers.provider_id')
@@ -85,7 +91,7 @@ class FrontendController extends Controller
             ]);
 
         //    dd($professions);
-            return view('frontend.pages.homeSearch', compact('professions'));
+            return view('frontend.pages.homeSearch', compact('professions', 'search_options'));
 
 
         }

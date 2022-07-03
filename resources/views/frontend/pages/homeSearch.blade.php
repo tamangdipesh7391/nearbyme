@@ -38,8 +38,13 @@
            
                <form action="{{route('home.search')}}" class="form-group mb-2 rounded d-flex home-search-form" method="POST">
                   @csrf
-                  <input required name="search" placeholder="Start searching here ..." type="search" id="home_search" class="form-control" >
-                  <input type="submit" class="form-control" value="Search" id="home_search_submit_btn">
+                  <select name="search" id="home_search" class="form-control">
+                     <option selected disabled>Choose any service</option>
+                     @foreach ($search_options as $option)
+                     <option value="{{$option->name}}">{{$option->name}}</option>
+                     
+                   @endforeach
+                   </select>                  <input type="submit" class="form-control" value="Search" id="home_search_submit_btn">
                 </form>
              
                 <div class="card shadow-none">
@@ -146,7 +151,8 @@
                                   </div>
                                </div>
                                <div class="col-md-4 col-sm-12 col-xs-12   align-items-center">
-                                    @if (Session::has('session_user'))
+                                    @if (Session::has('session_user') && $profession->is_active == 1)
+
                                     <form action="{{route('request.service')}}" method="POST" class="request-form">
                                        @csrf
                                        <input type="hidden" name="user_latitude" value="{{$profession->current_user_lattitude??''}}">
@@ -155,6 +161,10 @@
                                        <input type="hidden" name="provider_id" value="{{$profession->provider_id}}">
                                        <button onclick="return confirm('Are you sure?')" type="submit" class="btn btn-primary rounded-pill btn-block request-btn">Request Provider</button>
                                     </form>
+                                    @elseif (Session::has('session_user') && $profession->is_active == 0)
+                                    <p  class="text-danger text-center"><i class="bi bi-exclamation-circle"></i> 
+                                       <strong>Sorry!</strong> This provider is currently offline.
+                                    </p>
                                     @else
                                     <p  class="text-danger text-center"><i class="bi bi-exclamation-circle"></i> You must login to use this feature 
                                        <a class="text-primary text-center" href="{{url('user-panel/login')}}"> Login Now</a>

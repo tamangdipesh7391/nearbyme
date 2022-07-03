@@ -17,7 +17,7 @@ class UserDashboardController extends Controller
         $user_notification_msg = [];
         $user_notification_count = 0;
         $request_notifications = RequestedService::where('user_id','=',Session::get('session_user')->id)->where('is_seen','=',1)->limit(5)->get();
-        $user_notification_count = RequestedService::where('user_id','=',Session::get('session_user')->id)->where('is_seen','=',1)->count();
+        $user_notification_count = RequestedService::where('user_id','=',Session::get('session_user')->id)->where('is_seen','=',0)->count();
         foreach($request_notifications as $key => $request_notification){
            if($request_notification->status == 'confirmed'){
                 $user_notification_msg[$key]['status'] = 'confirmed';

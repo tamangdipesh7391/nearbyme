@@ -142,7 +142,7 @@
       
         @else
         <td>
-            <span class="p-2 badge badge-danger">Your request is not confirmed yet.</span>
+            <span class="p-2 badge badge-danger">No ratings yet.</span>
         </td>
          
         @endif
@@ -379,7 +379,7 @@
       
         @else
         <td>
-            <span class="p-2 badge badge-danger">Your request is not confirmed yet.</span>
+            <span class="p-2 badge badge-danger">No ratings yet.</span>
         </td>
          
         @endif
