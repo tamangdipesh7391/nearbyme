@@ -10,12 +10,14 @@ Route::group(['prefix' => 'admin-panel'],function(){
     Route::get('login',[AdminDashboardController::class,'login'])->name('admin.login');
     Route::resource('admins',AdminController::class);
     Route::post('login',[AdminController::class,'verify'])->name('admin.verify');
+    Route::any('forgot-password',[AdminController::class,'forgotPassword'])->name('admin.forgotPassword');
+    Route::any('reset-password/{token}',[AdminController::class,'resetPassword'])->name('admin.resetPassword');
 
     Route::group(['middleware' => 'adminLoginAuth'],function(){
         Route::get('/logout',[AdminDashboardController::class,'logout'])->name('admin.logout');
         Route::get('/',[AdminDashboardController::class,'index'])->name('admin.dashboard');
         Route::post('ckeditor/image_upload', [CkeditorController::class,'upload'])->name('upload');
-
+        Route::any('change-password/{id}',[AdminController::class,'changePassword'])->name('admin.changePassword');
         //Provider Routes 
         Route::get('/providers',[AdminDashboardController::class,'listProviders'])->name('admin.providers');
         Route::get('/providers/soft_delete/{id}',[AdminDashboardController::class,'softDeleteProvider'])->name('admin.providers.soft_delete');
@@ -33,6 +35,8 @@ Route::group(['prefix' => 'admin-panel'],function(){
         // Profession Route Start
         Route::resource('professions',ProfessionController::class);
         Route::get('/professions/manage/{id}',[ProfessionController::class,'manageProfession'])->name('admin.professions.manage');
+
+        
     });
    
 

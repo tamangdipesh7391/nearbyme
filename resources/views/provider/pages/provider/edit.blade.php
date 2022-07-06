@@ -20,7 +20,7 @@
                             </div>
                             
                         @endif
-                        <h3 class="card-title"><b><i class="fa fa-edit mr-2"></i>Edit User Page</b></h3>
+                        <h3 class="card-title"><b><i class="fa fa-edit mr-2"></i>Edit User Page</b><a class="ml-5" href="{{route('provider.changePassword',$provider->id)}}">Change Password</a></h3>
                     </div>
                     <div class="card-body">
                         <div class="form-group">

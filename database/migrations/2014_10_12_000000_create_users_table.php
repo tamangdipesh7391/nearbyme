@@ -26,6 +26,7 @@ class CreateUsersTable extends Migration
             $table->string('role')->default('user');
             $table->string('avatar')->nullable();
             $table->enum('status', ['new', 'active', 'suspended'])->default('new');
+            $table->string('token')->nullable()->unique();
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

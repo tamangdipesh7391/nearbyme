@@ -198,5 +198,28 @@ class ProviderController extends Controller
     {
         //
     }
+    public function changePassword(Request $request,$id){
+       
+        if($request->isMethod('get')){
+            $user_id = $id;
+            return view('provider.change-password',compact('user_id'));
+        }
+        if($request->isMethod('post')){
+            $request->validate([
+                'old_password' => 'required',
+                'password' => 'required|min:6|max:16|confirmed',
+            ]);
+            $user = User::findOrfail($id);
+            if(Hash::check($request->old_password,$user->password)){
+                $user->password = Hash::make($request->password);
+                $user->save();
+                return redirect('provider-panel/providers/'.$id.'/edit')->with('success','Password changed successfully');
+            }else{
+                return redirect()->back()->with('error','Old password is incorrect');
+            }
+        }
+            
+        
+    } 
 }
 

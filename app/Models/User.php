@@ -29,6 +29,7 @@ class User extends Authenticatable
         'citizenship',
         'profession_id',
         'address',
+        'token',
 
     ];
 

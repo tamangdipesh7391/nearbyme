@@ -13,6 +13,8 @@ Route::group(['prefix' => 'user-panel'],function(){
     Route::post('login',[UserController::class,'verify'])->name('user.verify');
 
     Route::group(['middleware' => 'userLoginAuth'],function(){
+        Route::any('change-password/{id}',[UserController::class,'changePassword'])->name('user.changePassword');
+
         Route::get('/logout',[UserDashboardController::class,'logout'])->name('user.logout');
         Route::get('/',[UserDashboardController::class,'index'])->name('user.dashboard');
         Route::post('ckeditor/image_upload', [CkeditorController::class,'upload'])->name('upload');

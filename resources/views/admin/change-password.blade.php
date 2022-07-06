@@ -60,41 +60,50 @@
                         </div>
                             
                         @endif
-                        <a href="{{url('/')}}" style="text-decoration: none;"><i class="fa fa-arrow-left" ></i> Goto Site</a> 
-
-                        <h2 class="fw-bold mb-5 text-center"><i class="fa fa-lock"></i> Admin Login </h2>
-                        <form action="{{route('admin.verify')}}" method="POST">
+                        <a href="{{ url('admin-panel/admins/'.$user_id.'/edit') }}" style="text-decoration: none;"><i class="fa fa-arrow-left" ></i> Go Back</a> 
+                        <hr>
+                        {{-- <h2 class="fw-bold mb-5 text-center"><i class="fa fa-link"></i> Admin Password reset  </h2> --}}
+                        <form action="{{route('admin.changePassword',$user_id)}}" method="POST">
 
 
                             @csrf
                             <!-- Email input -->
                             <div class="form-outline mb-4">
-                                <label class="form-label">Email</label>
+                                <label class="form-label">Enter Old Password</label>
 
-                                <input type="text" name="email" class="form-control" />
+                                <input type="password" name="old_password" class="form-control" value="{{old('old_password')}}" />
+                                <a style="color: red;">
+                                    @error('old_password')
+                                    {{$message}}
+                                @enderror
+                                </a>
                             </div>
 
-                            <!-- Password input -->
                             <div class="form-outline mb-4">
-                                <label class="form-label">Password</label>
+                                <label class="form-label">Enter New Password</label>
 
                                 <input type="password" name="password" class="form-control" />
+                                <a style="color: red;">
+                                    @error('password')
+                                    {{$message}}
+                                @enderror
+                                </a>
+                            </div>
+                            <div class="form-outline mb-4">
+                                <label class="form-label">Enter Confirm New Password</label>
+
+                                <input type="password" name="password_confirmation" class="form-control" />
+                                
                             </div>
 
+                          
 
 
                             <!-- Submit button -->
                             <button type="submit" class="btn btn-primary btn-block mb-4">
-                                Proceed to Login
+                               Change Password
                             </button>
-                            {{-- <div class="text-center">
-                                <small class="text-muted">
-                                    Don't have an account? <a href="{{route('admins.create')}}">Sign up Now</a>
-                                </small><br>
-                                <small class="text-muted">
-                                   <a href="{{route('admin.forgotPassword')}}">Forgot password?</a>
-                                </small>
-                            </div> --}}
+                            
 
 
                         </form>

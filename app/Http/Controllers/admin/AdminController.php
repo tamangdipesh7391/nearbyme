@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 
 class AdminController extends Controller
@@ -143,4 +144,62 @@ class AdminController extends Controller
     {
         //
     }
+    public function forgotPassword(Request $request){
+        
+        if($request->isMethod('get')){
+            return view('admin.forgot-password');
+        }
+        if($request->isMethod('post')){
+            $request->validate([
+                'email' => 'required|email',
+            ]);
+
+            $user = User::where('email',$request->email)->first();
+            if(!$user){
+                return redirect()->back()->with('error','Email not found');
+            }else{
+                $token = md5(microtime());
+                $details = [
+                    'title' => 'Mail from Nearby Me',
+                    'body' => 'Please click the link below to reset your password',
+                    'link' => route('admin.resetPassword',$token)
+                ];
+               
+                Mail::to('tamangdipesh7391@gmail.com')->send(new \App\Mail\AdminForgotPassword($details));
+                if(Mail::failures()){
+                    return redirect()->back()->with('error','Something went wrong');
+                }else{
+                    $user->token = $token;
+                    $user->save();
+                    return redirect()->back()->with('success','Please check your email');
+                }
+                dd("Email is Sent.");
+
+            }
+        }
+       
+    }
+    public function changePassword(Request $request,$id){
+       
+            if($request->isMethod('get')){
+                $user_id = $id;
+                return view('admin.change-password',compact('user_id'));
+            }
+            if($request->isMethod('post')){
+                $request->validate([
+                    'old_password' => 'required',
+                    'password' => 'required|min:6|max:16|confirmed',
+                ]);
+                $user = User::findOrfail($id);
+                if(Hash::check($request->old_password,$user->password)){
+                    $user->password = Hash::make($request->password);
+                    $user->save();
+                    return redirect('admin-panel/admins/'.$id.'/edit')->with('success','Password changed successfully');
+                }else{
+                    return redirect()->back()->with('error','Old password is incorrect');
+                }
+            }
+                
+            
+        } 
 }

@@ -61,40 +61,32 @@
                             
                         @endif
                         <a href="{{url('/')}}" style="text-decoration: none;"><i class="fa fa-arrow-left" ></i> Goto Site</a> 
-
-                        <h2 class="fw-bold mb-5 text-center"><i class="fa fa-lock"></i> Admin Login </h2>
-                        <form action="{{route('admin.verify')}}" method="POST">
+                        <hr>
+                        {{-- <h2 class="fw-bold mb-5 text-center"><i class="fa fa-link"></i> Admin Password reset  </h2> --}}
+                        <form action="{{route('admin.forgotPassword')}}" method="POST">
 
 
                             @csrf
                             <!-- Email input -->
                             <div class="form-outline mb-4">
-                                <label class="form-label">Email</label>
+                                <label class="form-label">Verify your email </label>
 
                                 <input type="text" name="email" class="form-control" />
+                                <a style="color: red;">
+                                    @error('email')
+                                    {{$message}}
+                                @enderror
+                                </a>
                             </div>
 
-                            <!-- Password input -->
-                            <div class="form-outline mb-4">
-                                <label class="form-label">Password</label>
-
-                                <input type="password" name="password" class="form-control" />
-                            </div>
-
+                          
 
 
                             <!-- Submit button -->
                             <button type="submit" class="btn btn-primary btn-block mb-4">
-                                Proceed to Login
+                                Get link to reset password
                             </button>
-                            {{-- <div class="text-center">
-                                <small class="text-muted">
-                                    Don't have an account? <a href="{{route('admins.create')}}">Sign up Now</a>
-                                </small><br>
-                                <small class="text-muted">
-                                   <a href="{{route('admin.forgotPassword')}}">Forgot password?</a>
-                                </small>
-                            </div> --}}
+                            
 
 
                         </form>
