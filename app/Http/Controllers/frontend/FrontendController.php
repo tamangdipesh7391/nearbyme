@@ -49,7 +49,6 @@ class FrontendController extends Controller
                 'users.*',
                 'provider_trackers.*'
             ]);
-           
             foreach ($professions as $key => $value) {
                 $current_provider_rating_sum = RequestedService::where('provider_id', $value->this_provider_id)->sum('rating');
                 $divideBy = RequestedService::where('provider_id', $value->this_provider_id)->count();
@@ -98,8 +97,7 @@ class FrontendController extends Controller
        
         
     }
-    function calc_distance_in_mile($latitudeFrom, $longitudeFrom,
-    $latitudeTo,  $longitudeTo)
+    function calc_distance_in_mile($latitudeFrom, $longitudeFrom,$latitudeTo,  $longitudeTo)
         {
             $long1 = deg2rad($longitudeFrom);
             $long2 = deg2rad($longitudeTo);
@@ -114,7 +112,7 @@ class FrontendController extends Controller
 
             $res = 2 * asin(sqrt($val));
 
-            $radius = 3958.756;
+            $radius = 3958.756; //earth radius in miles
             $distance_in_mile = $res*$radius;
             $distance_in_km = round($distance_in_mile * 1.609344,2);
             

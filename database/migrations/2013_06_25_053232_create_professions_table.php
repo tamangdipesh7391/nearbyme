@@ -17,7 +17,7 @@ class CreateProfessionsTable extends Migration
             $table->id();
             $table->string('name')->unique();
             $table->string('meta_description')->nullable();
-            $table->string('description')->nullable();
+            $table->text('description')->nullable();
             $table->string('avatar')->nullable();
             $table->boolean('status')->default(1);
 

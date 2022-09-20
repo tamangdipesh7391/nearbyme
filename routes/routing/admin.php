@@ -36,6 +36,8 @@ Route::group(['prefix' => 'admin-panel'],function(){
         Route::resource('professions',ProfessionController::class);
         Route::get('/professions/manage/{id}',[ProfessionController::class,'manageProfession'])->name('admin.professions.manage');
 
+        // Request Route Start
+        Route::get('/requests',[AdminController::class,'requestList'])->name('admin.requests');
         
     });
    

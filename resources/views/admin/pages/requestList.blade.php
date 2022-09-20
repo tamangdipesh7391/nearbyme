@@ -1,4 +1,4 @@
-@extends('provider.main')
+@extends('admin.main')
 @section('content')
 <h4 class="mt-2"><i class="fa fa-users mr-1 "></i> Your request lists</h4>
 @if (Session::has('success'))
@@ -56,13 +56,11 @@
          
           <td>
             @if($request->status == 'pending')
-           <button data-toggle="modal" data-target="#allModal{{$key}}" @if ($request->rating != null) disabled
-             
-           @endif class=" btn btn-sm btn-warning">{{ $request->status }}</button>
+           <button data-toggle="modal" data-target="#allModal{{$key}}" class=" btn btn-sm btn-warning">{{ $request->status }}</button>
             @elseif($request->status == 'confirmed')
-           <button data-toggle="modal" data-target="#allModal{{$key}}" @if ($request->rating != null) disabled @endif class="btn btn-sm btn-success">{{ $request->status }}</button>
+           <button data-toggle="modal" data-target="#allModal{{$key}}" class="btn btn-sm btn-success">{{ $request->status }}</button>
            @elseif($request->status == 'rejected')
-           <button data-toggle="modal" data-target="#allModal{{$key}}" @if ($request->rating != null) disabled @endif class="btn btn-sm btn-danger">{{ $request->status }}</button> 
+           <button data-toggle="modal" data-target="#allModal{{$key}}" class="btn btn-sm btn-danger">{{ $request->status }}</button> 
             {{-- @elseif($request->status == 'cancelled')
            <button data-toggle="modal" data-target="#allModal{{$key}}" class="btn btn-sm btn-danger">{{ $request->status }}</button> --}}
             @endif
@@ -295,11 +293,11 @@
             
             <td>
               @if($request->status == 'pending')
-             <button data-toggle="modal" data-target="#confirmedModal{{$key}}" @if ($request->rating != null) disabled @endif class=" btn btn-sm btn-warning">{{ $request->status }}</button>
+             <button data-toggle="modal" data-target="#confirmedModal{{$key}}" class=" btn btn-sm btn-warning">{{ $request->status }}</button>
               @elseif($request->status == 'confirmed')
-             <button data-toggle="modal" data-target="#confirmedModal{{$key}}" @if ($request->rating != null) disabled @endif class="btn btn-sm btn-success">{{ $request->status }}</button>
+             <button data-toggle="modal" data-target="#confirmedModal{{$key}}" class="btn btn-sm btn-success">{{ $request->status }}</button>
              @elseif($request->status == 'rejected')
-             <button data-toggle="modal" data-target="#confirmedModal{{$key}}" @if ($request->rating != null) disabled @endif class="btn btn-sm btn-danger">{{ $request->status }}</button> 
+             <button data-toggle="modal" data-target="#confirmedModal{{$key}}" class="btn btn-sm btn-danger">{{ $request->status }}</button> 
               {{-- @elseif($request->status == 'cancelled')
              <button data-toggle="modal" data-target="#confirmedModal{{$key}}" class="btn btn-sm btn-danger">{{ $request->status }}</button> --}}
               @endif

@@ -97,15 +97,15 @@
           </li>
           
          
-          {{-- <li class="nav-item menu-closed">
-            <a href="" class="nav-link active">
+          <li class="nav-item menu-closed">
+            <a href="{{route('admin.requests')}}" class="nav-link active">
               <i class="nav-icon fas fa-cogs"></i>
               <p>
-                Manage Subject Level
+                Manage Requests
               </p>
             </a>
           
-          </li> --}}
+          </li>
          
          
               
