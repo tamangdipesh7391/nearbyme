@@ -115,7 +115,6 @@ class FrontendController extends Controller
             $radius = 3958.756; //earth radius in miles
             $distance_in_mile = $res*$radius;
             $distance_in_km = round($distance_in_mile * 1.609344,2);
-            
 
 
             return ($distance_in_km); //to convert into KM mul by 1.609344.

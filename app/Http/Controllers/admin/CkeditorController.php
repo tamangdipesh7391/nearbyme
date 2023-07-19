@@ -9,7 +9,6 @@ class CkeditorController extends Controller
 {
     public function upload(Request $request)
     {
-        dd('ok');
        
         if($request->hasFile('upload')) {
             //get filename with extension

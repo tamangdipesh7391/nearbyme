@@ -31,7 +31,6 @@ class AdminController extends Controller
             }else{
                 return redirect()->route('admin.login')->with('error', 'You are not an admin');
             }
-       
         }else{
             return redirect()->route('admin.login')->with('error','Invalid Credentials');
         }
@@ -205,8 +204,9 @@ class AdminController extends Controller
         } 
 
         //request list of all users
-        public function requestList($id,$hid = null){
+        public function requestList($id, $hid = null){
             // hilight row logic 
+            // dd($id, $hid);
             $hilight_id = $hid;
             if($hid != null){
                 $requested_service = RequestedService::find($hid);
@@ -214,15 +214,15 @@ class AdminController extends Controller
                 $requested_service->save();
                 $hilight_id = $hid;
             }
-              //notification logic
-              $user_notification_msg = [];
-              $user_notification_count = 0;
-              $request_notifications = RequestedService::where('provider_id','=',Session::get('session_provider')->id)->where('is_seen_admin','=',0)->limit(5)->get();
-              $user_notification_count = RequestedService::where('provider_id','=',Session::get('session_provider')->id)->where('is_seen_admin','=',0)->count();
+            //notification logic
+            $user_notification_msg = [];
+            $user_notification_count = 0;
+              $request_notifications = RequestedService::where('provider_id','=',Session::get('session_provider')?->id)->where('is_seen_admin','=',0)->limit(5)->get();
+              $user_notification_count = RequestedService::where('provider_id','=',Session::get('session_provider')?->id)->where('is_seen_admin','=',0)->count();
               foreach($request_notifications as $key => $request_notification){
-                      $user_notification_msg[$key]['notification_id'] = $request_notification->id;
-                      $user_notification_msg[$key]['message'][$key] = $request_notification->user->name.' has sent you a request';
-                      $user_notification_msg[$key]['time_ago'][$key] = strtotime($request_notification->created_at);
+                      $user_notification_msg[$key]['notification_id'] = $request_notification?->id;
+                      $user_notification_msg[$key]['message'][$key] = $request_notification?->user?->name.' has sent you a request';
+                      $user_notification_msg[$key]['time_ago'][$key] = strtotime($request_notification?->created_at);
                   
               }
     

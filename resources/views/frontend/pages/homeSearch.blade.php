@@ -198,6 +198,55 @@
                
           </div>
        </div>
+       <!-- map integration -->
+         <div id="map"></div>
+         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBHsIIqvhLvtMwXHh9WJzGz2KqHvvg1q1U"></script>
+
+         <script>
+            // Initialize the map
+            function initMap() {
+            // Create a map object and center it on a specific location
+            const map = new google.maps.Map(document.getElementById("map"), {
+               center: { lat: 37.7749, lng: -122.4194 },
+               zoom: 13,
+            });
+
+            console.log(map); 
+
+            // Request the user's location
+            if (navigator.geolocation) {
+               navigator.geolocation.getCurrentPosition(
+                  (position) => {
+                     console.log(position);
+                  const userLocation = {
+                     lat: position.coords.latitude,
+                     lng: position.coords.longitude,
+                  };
+
+                  // Create a marker at the user's location
+                  const marker = new google.maps.Marker({
+                     position: userLocation,
+                     map: map,
+                     title: "Your Location",
+                  });
+
+                  // Center the map on the user's location
+                  map.setCenter(userLocation);
+                  },
+                  () => {
+                  // Handle location error
+                  alert("Error: The Geolocation service failed.");
+                  }
+               );
+            } else {
+               // Browser doesn't support geolocation
+               alert("Error: Your browser doesn't support geolocation.");
+            }
+            }
+
+         </script>
+
+       <!-- end map integration  -->
     </div>
  </div>
 @endsection

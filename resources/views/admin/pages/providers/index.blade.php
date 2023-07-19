@@ -86,7 +86,7 @@
       </table>
       @else
       <p class="mt-3" style="color: red">
-        There are no inactive providers.
+        There are no new providers.
       </p>
       @endif
     </div>

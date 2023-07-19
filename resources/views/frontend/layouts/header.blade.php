@@ -37,7 +37,7 @@
   ======================================================== -->
 </head>
 
-<body>
+<body  onload="initMap()">
 
   <!-- ======= Header ======= -->
   <header id="header" class="fixed-top d-flex align-items-center">

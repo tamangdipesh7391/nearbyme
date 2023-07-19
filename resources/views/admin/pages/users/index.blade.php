@@ -86,7 +86,7 @@
       </table>
       @else
       <p class="mt-3" style="color: red">
-        There are no inactive users.
+        There are no new users.
       </p>
       @endif
     </div>
