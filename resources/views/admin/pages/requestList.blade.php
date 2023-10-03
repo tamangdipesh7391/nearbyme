@@ -45,10 +45,10 @@
           @php
           $url = "#";
          @endphp
-        @if ($request->requestedUser->current_latitude != null && $request->requestedUser->current_longitude != null)
+        @if ($request->requestedUser?->current_latitude != null && $request->requestedUser?->current_longitude != null)
         @php
             
-        $url = "https://maps.google.com/?q=".$request->requestedUser->current_latitude.",".$request->requestedUser->current_longitude;
+        $url = "https://maps.google.com/?q=".$request->requestedUser?->current_latitude.",".$request->requestedUser?->current_longitude;
         @endphp
          @endif   
             <a href="{{ $url }}" target="_blank">Follow Link</a></td>
@@ -177,10 +177,10 @@
           @php
           $url = "#";
          @endphp
-        @if ($request->requestedUser->current_latitude != null && $request->requestedUser->current_longitude != null)
+        @if ($request->requestedUser?->current_latitude != null && $request->requestedUser?->current_longitude != null)
         @php
             
-        $url = "https://maps.google.com/?q=".$request->requestedUser->current_latitude.",".$request->requestedUser->current_longitude;
+        $url = "https://maps.google.com/?q=".$request->requestedUser?->current_latitude.",".$request->requestedUser?->current_longitude;
         @endphp
          @endif   
             <a href="{{ $url }}" target="_blank">Follow Link</a></td>
@@ -283,10 +283,10 @@
           @php
           $url = "#";
          @endphp
-        @if ($request->requestedUser->current_latitude != null && $request->requestedUser->current_longitude != null)
+        @if ($request->requestedUser?->current_latitude != null && $request->requestedUser?->current_longitude != null)
         @php
             
-        $url = "https://maps.google.com/?q=".$request->requestedUser->current_latitude.",".$request->requestedUser->current_longitude;
+        $url = "https://maps.google.com/?q=".$request->requestedUser?->current_latitude.",".$request->requestedUser?->current_longitude;
         @endphp
          @endif   
             <a href="{{ $url }}" target="_blank">Follow Link</a></td>
@@ -415,10 +415,10 @@
           @php
           $url = "#";
          @endphp
-        @if ($request->requestedUser->current_latitude != null && $request->requestedUser->current_longitude != null)
+        @if ($request->requestedUser?->current_latitude != null && $request->requestedUser?->current_longitude != null)
         @php
             
-        $url = "https://maps.google.com/?q=".$request->requestedUser->current_latitude.",".$request->requestedUser->current_longitude;
+        $url = "https://maps.google.com/?q=".$request->requestedUser?->current_latitude.",".$request->requestedUser?->current_longitude;
         @endphp
          @endif   
             <a href="{{ $url }}" target="_blank">Follow Link</a></td>
@@ -520,10 +520,10 @@
           @php
           $url = "#";
          @endphp
-        @if ($request->requestedUser->current_latitude != null && $request->requestedUser->current_longitude != null)
+        @if ($request->requestedUser?->current_latitude != null && $request->requestedUser?->current_longitude != null)
         @php
             
-        $url = "https://maps.google.com/?q=".$request->requestedUser->current_latitude.",".$request->requestedUser->current_longitude;
+        $url = "https://maps.google.com/?q=".$request->requestedUser?->current_latitude.",".$request->requestedUser?->current_longitude;
         @endphp
          @endif   
             <a href="{{ $url }}" target="_blank">Follow Link</a></td>

@@ -145,7 +145,6 @@ class AdminController extends Controller
         //
     }
     public function forgotPassword(Request $request){
-        
         if($request->isMethod('get')){
             return view('admin.forgot-password');
         }
@@ -173,8 +172,6 @@ class AdminController extends Controller
                     $user->save();
                     return redirect()->back()->with('success','Please check your email');
                 }
-                dd("Email is Sent.");
-
             }
         }
        
@@ -199,9 +196,7 @@ class AdminController extends Controller
                     return redirect()->back()->with('error','Old password is incorrect');
                 }
             }
-                
-            
-        } 
+        }
 
         //request list of all users
         public function requestList($id, $hid = null){

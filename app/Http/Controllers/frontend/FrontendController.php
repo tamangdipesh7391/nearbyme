@@ -22,7 +22,15 @@ class FrontendController extends Controller
         $search_options = Profession::where('status', 1)->get();
 
         $professions = Profession::where('status', 1)->paginate(6);
-        return view('frontend.index', compact('professions', 'search_options'));
+        $bestProviders = RequestedService::with(["provider.profession"])->get()
+            ->groupBy('provider_id')
+            ->map(function ($row) {
+                $rating = $row->sum('rating') / $row->count();
+                $row->first()->rating = $rating;
+                return $row->first();
+            })->sortByDesc('rating')->take(6);
+
+        return view('frontend.index', compact('professions', 'search_options', 'bestProviders'));
     }
     public function homeSearch(Request $request)
     {
