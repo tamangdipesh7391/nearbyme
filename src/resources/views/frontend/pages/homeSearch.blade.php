@@ -159,7 +159,11 @@
                                        <input type="hidden" name="user_longitude" value="{{$profession->current_user_longitude??''}}">
                                        <input type="hidden" name="user_id" value="{{Session::get('session_user')->id}}">
                                        <input type="hidden" name="provider_id" value="{{$profession->provider_id}}">
+                                       @if($profession->is_busy)
+                                       <button disabled class="btn btn-warning rounded-pill">Busy</button>
+                                       @else
                                        <button onclick="return confirm('Are you sure?')" type="submit" class="btn btn-primary rounded-pill btn-block request-btn">Request Provider</button>
+                                       @endif
                                     </form>
                                     @elseif (Session::has('session_user') && $profession->is_active == 0)
                                     <p  class="text-danger text-center"><i class="bi bi-exclamation-circle"></i> 

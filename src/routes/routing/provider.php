@@ -23,7 +23,6 @@ Route::group(['prefix' => 'provider-panel'],function(){
         Route::get('/request-list/restore/{id}',[RequestedServiceController::class,'restoreRequest'])->name('provider.request.restore');
         Route::get('/request-list/delete/{id}',[RequestedServiceController::class,'deleteRequest'])->name('provider.request.delete');
         Route::patch('/request/manage/{id}',[RequestedServiceController::class,'manageRequest'])->name('provider.request.manage');
-
     });
    
 

@@ -25,6 +25,7 @@ Route::group(['prefix' => 'user-panel'],function(){
         Route::get('/request-history/delete/{id}',[RequestedServiceController::class,'deleteRequest'])->name('user.request.delete');
         Route::get('/request-history/manage/{id}',[RequestedServiceController::class,'manageRequest'])->name('user.request.manage');
         Route::post('/provider-rating/{id}',[RequestedServiceController::class,'providerRating'])->name('user.request.provider_rating');
+        Route::patch('/request/feedback/{id}',[RequestedServiceController::class,'sendFeedback'])->name('user.feedback.send');
         
     });
    

@@ -109,9 +109,10 @@ class RequestedServiceController extends Controller
         $requested_services = RequestedService::where('provider_id', $id)->where('is_canceled',0)->get();
         $pending_services = RequestedService::where('provider_id', $id)->where('status', 'pending')->get();
         $confirmed_services = RequestedService::where('provider_id', $id)->where('status', 'confirmed')->get();
+        $completed_services = RequestedService::where('provider_id', $id)->where('status', 'completed')->get();
         $rejected_services = RequestedService::where('provider_id', $id)->where('status', 'rejected')->get();
         $cancelled_services = RequestedService::where('provider_id', $id)->where('status', 'cancelled')->get();
-        return view('provider.pages.provider.requestList', compact('requested_services', 'pending_services', 'confirmed_services', 'rejected_services', 'cancelled_services', 'user_notification_msg', 'user_notification_count', 'hilight_id'));
+        return view('provider.pages.provider.requestList', compact('requested_services', 'pending_services', 'confirmed_services', 'completed_services', 'rejected_services', 'cancelled_services', 'user_notification_msg', 'user_notification_count', 'hilight_id'));
     }
     public function softDeleteRequest($id){
         $requested_service = RequestedService::find($id);
@@ -131,6 +132,9 @@ class RequestedServiceController extends Controller
     public function manageRequest(Request $request,$id){
         $user = RequestedService::findOrfail($id);
         if($request->has('status')){
+            if ($request->status == "confirmed") {
+                $user->is_completed = 1;
+            }
             $user->status = $request->status;
             $user->is_seen = 0;
             $user->save();

@@ -19,11 +19,13 @@ class CreateRequestedServicesTable extends Migration
             $table->foreignId('provider_id')->constrained('users');
             $table->string('user_latitude')->nullable();
             $table->string('user_longitude')->nullable();
-            $table->enum('status',['pending','confirmed','rejected','cancelled'])->default('pending');
+            $table->enum('status',['pending','confirmed','rejected','cancelled', 'completed'])->default('pending');
             $table->boolean('is_canceled')->default(0);
+            $table->boolean('is_completed')->default(0);
             $table->boolean('is_seen')->default(1);
             $table->boolean('is_seen_admin')->default(0);
             $table->integer('rating')->nullable();
+            $table->text('feedback')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
