@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500">
+  <defs>
+    <clipPath id="c"><circle cx="250" cy="250" r="245"/></clipPath>
+  </defs>
+  <circle cx="250" cy="250" r="245" fill="#c85c42"/>
+  <g clip-path="url(#c)">
+    <!-- hair (back) -->
+    <path d="M125 230 C110 110 180 50 250 50 C320 50 390 110 375 230 L390 400 L110 400 Z" fill="#3b2a20"/>
+    <!-- neck -->
+    <rect x="215" y="300" width="70" height="70" fill="#dda57f"/>
+    <!-- body -->
+    <path d="M70 500 C80 400 150 360 215 350 L250 390 L285 350 C350 360 420 400 430 500 Z" fill="#8e3b6f"/>
+    <path d="M215 350 L250 390 L285 350 L275 345 L250 372 L225 345 Z" fill="#dda57f"/>
+    <!-- ears -->
+    <ellipse cx="160" cy="215" rx="18" ry="28" fill="#e8b48f"/>
+    <ellipse cx="340" cy="215" rx="18" ry="28" fill="#e8b48f"/>
+    <!-- face -->
+    <path d="M165 170 C165 100 335 100 335 170 L335 230 C335 290 290 330 250 330 C210 330 165 290 165 230 Z" fill="#e8b48f"/>
+    <!-- hair (front fringe) -->
+    <path d="M150 200 C145 110 200 70 255 72 C320 74 360 120 350 200 C330 150 290 125 240 118 C215 150 185 175 150 200 Z" fill="#3b2a20"/>
+    <!-- earrings -->
+    <circle cx="160" cy="250" r="7" fill="#f2c230"/>
+    <circle cx="340" cy="250" r="7" fill="#f2c230"/>
+  </g>
+</svg>

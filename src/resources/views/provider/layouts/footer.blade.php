@@ -86,6 +86,36 @@ $(document).ready(function() {
   
 
 </script>
+<script>
+  // Share the provider's live position while the panel is open, so users with a confirmed booking can track them.
+  (function () {
+    if (!navigator.geolocation) return;
+    var url = @json(route('provider.location.update'));
+    var token = @json(csrf_token());
+    var SEND_EVERY_MS = 10000;
+    var lastSent = 0, pending = null, timer = null;
+
+    function send(position) {
+      lastSent = Date.now();
+      pending = null;
+      var body = new FormData();
+      body.append('_token', token);
+      body.append('latitude', position.coords.latitude);
+      body.append('longitude', position.coords.longitude);
+      fetch(url, { method: 'POST', body: body, credentials: 'same-origin', headers: { 'Accept': 'application/json' } })
+        .catch(function () { /* try again with the next position */ });
+    }
+
+    navigator.geolocation.watchPosition(function (position) {
+      var wait = SEND_EVERY_MS - (Date.now() - lastSent);
+      if (wait <= 0) return send(position);
+      pending = position;
+      if (!timer) timer = setTimeout(function () { timer = null; if (pending) send(pending); }, wait);
+    }, function (err) {
+      console.warn('Live location unavailable:', err.message);
+    }, { enableHighAccuracy: true, maximumAge: 5000 });
+  })();
+</script>
 </body>
 </html>
 

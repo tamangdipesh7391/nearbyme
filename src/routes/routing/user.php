@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CkeditorController;
 use App\Http\Controllers\user\RequestedServiceController;
+use App\Http\Controllers\user\TrackProviderController;
 use App\Http\Controllers\user\UserController;
 use App\Http\Controllers\user\UserDashboardController;
 use Illuminate\Support\Facades\Route;
@@ -26,6 +27,8 @@ Route::group(['prefix' => 'user-panel'],function(){
         Route::get('/request-history/manage/{id}',[RequestedServiceController::class,'manageRequest'])->name('user.request.manage');
         Route::post('/provider-rating/{id}',[RequestedServiceController::class,'providerRating'])->name('user.request.provider_rating');
         Route::patch('/request/feedback/{id}',[RequestedServiceController::class,'sendFeedback'])->name('user.feedback.send');
+        Route::get('/track/{id}',[TrackProviderController::class,'show'])->name('user.request.track');
+        Route::get('/track/{id}/location',[TrackProviderController::class,'location'])->name('user.request.track.location');
         
     });
    

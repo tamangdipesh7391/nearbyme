@@ -11,12 +11,7 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          @if (Session::get('session_admin')->avatar != null && Session::get('session_admin')->role == 'admin') 
-            <img src="{{url('admin_avatar/'.Session::get('session_admin')->avatar)}}" class="img-circle elevation-2" alt="{{Session::get('session_admin')->name}}">
-            @else
-                <img src="{{url('admin_avatar/default.jpg')}}" class="img-circle elevation-2" alt="{{Session::get('session_admin')->name}}">
-
-          @endif
+          <img src="{{url('admin_avatar/female.svg')}}" class="img-circle elevation-2" alt="{{Session::get('session_admin')->name}}">
         </div>
         <div class="info">
           <a href="{{route('admins.edit',Session::get('session_admin')->id)}}" class="d-block">{{Session::get('session_admin')->name}}</a>

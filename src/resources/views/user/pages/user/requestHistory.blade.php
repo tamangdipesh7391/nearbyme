@@ -55,6 +55,7 @@
                     <span class="badge badge-warning">Pending</span>
                     @elseif($request->status == 'confirmed')
                     <span class="badge badge-success">Confirmed</span>
+                    <a href="{{ route('user.request.track', $request->id) }}" class="btn btn-primary btn-xs rounded-pill ml-1"><i class="fa fa-map-marker-alt"></i> Track</a>
                     @elseif($request->status == 'completed')
                     <span class="badge badge-success">Completed</span>
                     @elseif($request->status == 'rejected')
@@ -210,6 +211,7 @@
                     <span class="badge badge-warning">Pending</span>
                     @elseif($request->status == 'confirmed')
                     <span class="badge badge-success">Confirmed</span>
+                    <a href="{{ route('user.request.track', $request->id) }}" class="btn btn-primary btn-xs rounded-pill ml-1"><i class="fa fa-map-marker-alt"></i> Track</a>
                     @elseif($request->status == 'rejected')
                     <span class="badge badge-danger">Rejected</span>
                     @endif
@@ -271,6 +273,7 @@
                     <span class="badge badge-warning">Pending</span>
                     @elseif($request->status == 'confirmed')
                     <span class="badge badge-success">Confirmed</span>
+                    <a href="{{ route('user.request.track', $request->id) }}" class="btn btn-primary btn-xs rounded-pill ml-1"><i class="fa fa-map-marker-alt"></i> Track</a>
                     @elseif($request->status == 'rejected')
                     <span class="badge badge-danger">Rejected</span>
                     @endif
@@ -383,6 +386,7 @@
                     <span class="badge badge-warning">Pending</span>
                     @elseif($request->status == 'confirmed')
                     <span class="badge badge-success">Confirmed</span>
+                    <a href="{{ route('user.request.track', $request->id) }}" class="btn btn-primary btn-xs rounded-pill ml-1"><i class="fa fa-map-marker-alt"></i> Track</a>
                     @elseif($request->status == 'rejected')
                     <span class="badge badge-danger">Rejected</span>
                     @endif
@@ -442,6 +446,7 @@
                     <span class="badge badge-warning">Pending</span>
                     @elseif($request->status == 'confirmed')
                     <span class="badge badge-success">Confirmed</span>
+                    <a href="{{ route('user.request.track', $request->id) }}" class="btn btn-primary btn-xs rounded-pill ml-1"><i class="fa fa-map-marker-alt"></i> Track</a>
                     @elseif($request->status == 'completed')
                     <span class="badge badge-success">Completed</span>
                     @elseif($request->status == 'rejected')
@@ -540,6 +545,7 @@
                     <span class="badge badge-warning">Pending</span>
                     @elseif($request->status == 'confirmed')
                     <span class="badge badge-success">Confirmed</span>
+                    <a href="{{ route('user.request.track', $request->id) }}" class="btn btn-primary btn-xs rounded-pill ml-1"><i class="fa fa-map-marker-alt"></i> Track</a>
                     @elseif($request->status == 'rejected')
                     <span class="badge badge-danger">Rejected</span>
                     @endif
@@ -598,6 +604,7 @@
                     <span class="badge badge-warning">Pending</span>
                     @elseif($request->status == 'confirmed')
                     <span class="badge badge-success">Confirmed</span>
+                    <a href="{{ route('user.request.track', $request->id) }}" class="btn btn-primary btn-xs rounded-pill ml-1"><i class="fa fa-map-marker-alt"></i> Track</a>
                     @elseif($request->status == 'rejected')
                     <span class="badge badge-danger">Rejected</span>
                     @endif
