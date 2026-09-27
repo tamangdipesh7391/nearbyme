@@ -48,7 +48,7 @@
 
 
                 </td>
-                <td>{{$request->provider->profession->name}}</td>
+                <td>{{ $request->provider->profession->name ?? 'N/A' }}</td>
 
                 <td>
                     @if($request->status == 'pending')
@@ -203,7 +203,7 @@
             <tr>
                 <td>{{ ++$key }}</td>
                 <td>{{ $request->provider->name }}</td>
-                <td>{{$request->provider->profession->name}}</td>
+                <td>{{ $request->provider->profession->name ?? 'N/A' }}</td>
 
                 <td>
                     @if($request->status == 'pending')
@@ -264,7 +264,7 @@
             <tr>
                 <td>{{ ++$key }}</td>
                 <td>{{ $request->provider->name }}</td>
-                <td>{{$request->provider->profession->name}}</td>
+                <td>{{ $request->provider->profession->name ?? 'N/A' }}</td>
 
                 <td>
                     @if($request->status == 'pending')
@@ -376,7 +376,7 @@
             <tr>
                 <td>{{ ++$key }}</td>
                 <td>{{ $request->provider->name }}</td>
-                <td>{{$request->provider->profession->name}}</td>
+                <td>{{ $request->provider->profession->name ?? 'N/A' }}</td>
 
                 <td>
                     @if($request->status == 'pending')
@@ -435,7 +435,7 @@
             <tr>
                 <td>{{ ++$key }}</td>
                 <td>{{ $request->provider->name }}</td>
-                <td>{{$request->provider->profession->name}}</td>
+                <td>{{ $request->provider->profession->name ?? 'N/A' }}</td>
 
                 <td>
                     @if($request->status == 'pending')
@@ -533,7 +533,7 @@
             <tr>
                 <td>{{ ++$key }}</td>
                 <td>{{ $request->provider->name }}</td>
-                <td>{{$request->provider->profession->name}}</td>
+                <td>{{ $request->provider->profession->name ?? 'N/A' }}</td>
 
                 <td>
                     @if($request->status == 'pending')
@@ -591,7 +591,7 @@
             <tr>
                 <td>{{ ++$key }}</td>
                 <td>{{ $request->provider->name }}</td>
-                <td>{{$request->provider->profession->name}}</td>
+                <td>{{ $request->provider->profession->name ?? 'N/A' }}</td>
 
                 <td>
                     @if($request->status == 'pending')

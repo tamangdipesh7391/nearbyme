@@ -76,7 +76,7 @@
 
                                 <input type="email" name="email" class="form-control"
                                     value="{{ old('email') }}" />
-                                <a style="color: red">
+                                <a class="email-feedback" style="color: red">
                                     @error('email')
                                         {{ $message }}
                                     @enderror
@@ -129,6 +129,8 @@
     </section>
     <!-- Section: Design Block -->
 
+
+    @include('partials.email-domain-check')
 
 </body>
 

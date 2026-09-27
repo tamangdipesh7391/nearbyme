@@ -80,6 +80,13 @@
     </div>
   </header><!-- End Header -->
 
+  @if (Session::has('error'))
+  <div class="alert alert-danger alert-dismissible fade show position-fixed start-50 translate-middle-x shadow" role="alert" style="top: 100px; z-index: 1050;">
+    {{ Session::get('error') }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  @endif
+
   <main id="main">
 
 @endsection

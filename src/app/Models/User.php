@@ -64,6 +64,26 @@ class User extends Authenticatable
     {
         return $this->belongsTo(ProviderTracker::class);
     }
+    /**
+     * Count this account's unresolved bookings (as customer or provider), keyed by status.
+     *
+     * @return array
+     */
+    public function unresolvedBookingCounts()
+    {
+        $counts = RequestedService::where(function ($query) {
+                $query->where('user_id', $this->id)->orWhere('provider_id', $this->id);
+            })
+            ->whereIn('status', ['pending', 'confirmed'])
+            ->selectRaw('status, count(*) as total')
+            ->groupBy('status')
+            ->pluck('total', 'status');
+
+        return [
+            'pending' => (int) ($counts['pending'] ?? 0),
+            'confirmed' => (int) ($counts['confirmed'] ?? 0),
+        ];
+    }
     //calculate distance from  lattitude and longitude
     public function calc_distance_in_mile( $lat1, $lon1, $lat2, $lon2 ) {
         $theta = $lon1 - $lon2;

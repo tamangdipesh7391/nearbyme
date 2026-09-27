@@ -8,6 +8,7 @@ use App\Models\RequestedService;
 use App\Models\User;
 use App\Models\UserTracker;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
 class FrontendController extends Controller
@@ -41,6 +42,7 @@ class FrontendController extends Controller
             $current_user_location = UserTracker::where('user_id', $current_user_id)->first();
             $current_user_lat = $current_user_location->current_latitude ?? 0;
             $current_user_lng = $current_user_location->current_longitude ?? 0;
+            $current_user_online = $current_user_location && $current_user_location->is_active == 1;
             $professions = User::join('professions', 'users.profession_id', '=', 'professions.id')
                 ->join('provider_trackers', 'users.id', '=', 'provider_trackers.provider_id')
                 ->where('users.status', 1)
@@ -57,7 +59,12 @@ class FrontendController extends Controller
                     'users.*',
                     'provider_trackers.*'
                 ]);
+            $already_requested_ids = RequestedService::where('user_id', $current_user_id)
+                ->whereIn('status', ['pending', 'confirmed'])
+                ->pluck('provider_id')
+                ->all();
             foreach ($professions as $key => $value) {
+                $professions[$key]->already_requested = in_array($value->this_provider_id, $already_requested_ids);
                 $current_provider_rating_sum = RequestedService::where('provider_id', $value->this_provider_id)->sum('rating');
                 $divideBy = RequestedService::where('provider_id', $value->this_provider_id)->count();
                 if ($divideBy == 0) {
@@ -71,10 +78,10 @@ class FrontendController extends Controller
                 $professions[$i]['is_busy'] = $this->getBusyStatus($professions[$i]?->this_provider_id);
                 $professions[$i]['current_user_lattitude'] = $current_user_lat;
                 $professions[$i]['current_user_longitude'] = $current_user_lng;
-                if ($current_user_lat != null && $current_user_lng != null && $professions[$i]->current_latitude != null && $professions[$i]->current_longitude != null) {
-                    $distance = $this->calc_distance_in_mile($current_user_lat, $current_user_lng, $professions[$i]->current_latitude, $professions[$i]->current_longitude);
-
-                    $professions[$i]['distance'] = $distance + $i;
+                // Distance is only meaningful when both sides are online with a live location.
+                $professions[$i]['distance'] = 0;
+                if ($current_user_online && $professions[$i]->is_active == 1 && $current_user_lat != null && $current_user_lng != null && $professions[$i]->current_latitude != null && $professions[$i]->current_longitude != null) {
+                    $professions[$i]['distance'] = $this->calc_distance_in_mile($current_user_lat, $current_user_lng, $professions[$i]->current_latitude, $professions[$i]->current_longitude);
                 }
             }
             return view('frontend.pages.homeSearch', compact('professions', 'search_options'));
@@ -135,7 +142,39 @@ class FrontendController extends Controller
 
     public function requestService(Request $request)
     {
-        RequestedService::create($request->all());
-        return redirect('user-panel/request-history/' . $request->user_id)->with('success', 'Requested Successfully');
+        if (!isset(Session::get('session_user')->id)) {
+            return redirect()->route('user.login')->with('error', 'Please login first');
+        }
+        $request->validate([
+            'provider_id' => 'required|exists:users,id',
+        ]);
+        $user_id = Session::get('session_user')->id;
+
+        $error = DB::transaction(function () use ($request, $user_id) {
+            // Lock the requesting user's row so a double submit can't create two bookings.
+            User::whereKey($user_id)->lockForUpdate()->first();
+
+            $existing = RequestedService::where('user_id', $user_id)
+                ->where('provider_id', $request->provider_id)
+                ->whereIn('status', ['pending', 'confirmed'])
+                ->first();
+            if ($existing) {
+                $state = $existing->status == 'pending' ? 'a pending request' : 'an in-progress booking';
+                return 'You already have '.$state.' with '.$existing->provider->name.'. You can request them again once it is completed, rejected or cancelled.';
+            }
+
+            RequestedService::create([
+                'user_id' => $user_id,
+                'provider_id' => $request->provider_id,
+                'user_latitude' => $request->user_latitude,
+                'user_longitude' => $request->user_longitude,
+            ]);
+            return null;
+        });
+
+        if ($error) {
+            return redirect()->back()->with('error', $error);
+        }
+        return redirect('user-panel/request-history/' . $user_id)->with('success', 'Requested Successfully');
     }
 }

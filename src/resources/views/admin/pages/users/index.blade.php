@@ -12,16 +12,19 @@
 </div>  
 @endif
 <hr>
+@php
+  $tab = in_array(session('tab'), ['new', 'active', 'suspended', 'trashed']) ? session('tab') : 'new';
+@endphp
 <nav>
     <div class="nav nav-tabs" id="nav-tab" role="tablist">
-      <a class="nav-link active" id="nav-profile-tab" data-toggle="tab" href="#nav-new" role="tab" aria-controls="nav-profile" aria-selected="false">New</a>
-      <a class="nav-link " id="nav-home-tab" data-toggle="tab" href="#nav-active" role="tab" aria-controls="nav-home" aria-selected="true">Active</a>
-      <a class="nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-suspended" role="tab" aria-controls="nav-contact" aria-selected="false">Suspended</a>
-      <a class="nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-trashed" role="tab" aria-controls="nav-contact" aria-selected="false">Trashed</a>
+      <a class="nav-link {{ $tab == 'new' ? 'active' : '' }}" id="nav-profile-tab" data-toggle="tab" href="#nav-new" role="tab" aria-controls="nav-profile" aria-selected="{{ $tab == 'new' ? 'true' : 'false' }}">New</a>
+      <a class="nav-link {{ $tab == 'active' ? 'active' : '' }}" id="nav-home-tab" data-toggle="tab" href="#nav-active" role="tab" aria-controls="nav-home" aria-selected="{{ $tab == 'active' ? 'true' : 'false' }}">Active</a>
+      <a class="nav-link {{ $tab == 'suspended' ? 'active' : '' }}" id="nav-contact-tab" data-toggle="tab" href="#nav-suspended" role="tab" aria-controls="nav-contact" aria-selected="{{ $tab == 'suspended' ? 'true' : 'false' }}">Suspended</a>
+      <a class="nav-link {{ $tab == 'trashed' ? 'active' : '' }}" id="nav-contact-tab" data-toggle="tab" href="#nav-trashed" role="tab" aria-controls="nav-contact" aria-selected="{{ $tab == 'trashed' ? 'true' : 'false' }}">Trashed</a>
     </div>
   </nav>
   <div class="tab-content" id="nav-tabContent">
-    <div class="tab-pane fade show active" id="nav-new" role="tabpanel" aria-labelledby="nav-profile-tab">
+    <div class="tab-pane fade {{ $tab == 'new' ? 'show active' : '' }}" id="nav-new" role="tabpanel" aria-labelledby="nav-profile-tab">
       @if (count($new_users) > 0)
       <table class="table table-bordered table-hover">
         <tr>
@@ -55,7 +58,7 @@
                       <span aria-hidden="true">&times;</span>
                     </button>
                   </div>
-                  <form action="{{route('admin.users.manage',$user->id)}}" method="POST">
+                  <form action="{{route('admin.users.manage', [$user->id, 'tab' => 'new'])}}" method="POST">
                   <div class="modal-body">
                       @csrf
                       @method('PATCH')
@@ -79,7 +82,7 @@
             {{-- modal end --}}
           </td>
           <td>
-            <a onclick="return confirm('Are you sure?')" href="{{ route('admin.users.soft_delete', $user->id) }}" class="btn btn-danger btn-sm">Delete</a>
+            <a onclick="return confirm('Are you sure?')" href="{{ route('admin.users.soft_delete', [$user->id, 'tab' => 'new']) }}" class="btn btn-danger btn-sm">Delete</a>
           </td>
         </tr>
         @endforeach
@@ -90,7 +93,7 @@
       </p>
       @endif
     </div>
-    <div class="tab-pane fade  " id="nav-active" role="tabpanel" aria-labelledby="nav-home-tab">
+    <div class="tab-pane fade {{ $tab == 'active' ? 'show active' : '' }}" id="nav-active" role="tabpanel" aria-labelledby="nav-home-tab">
       
       @if (count($active_users) > 0)
      
@@ -126,7 +129,7 @@
                       <span aria-hidden="true">&times;</span>
                     </button>
                   </div>
-                  <form action="{{route('admin.users.manage',$user->id)}}" method="POST">
+                  <form action="{{route('admin.users.manage', [$user->id, 'tab' => 'active'])}}" method="POST">
                   <div class="modal-body">
                       @csrf
                       @method('PATCH')
@@ -150,7 +153,7 @@
             {{-- modal end --}}
           </td>
           <td>
-            <a onclick="return confirm('Are you sure?')" href="{{ route('admin.users.soft_delete', $user->id) }}" class="btn btn-danger btn-sm">Delete</a>
+            <a onclick="return confirm('Are you sure?')" href="{{ route('admin.users.soft_delete', [$user->id, 'tab' => 'active']) }}" class="btn btn-danger btn-sm">Delete</a>
           </td>
         </tr>
         @endforeach
@@ -164,7 +167,7 @@
     </div>
    
   
-    <div class="tab-pane fade" id="nav-suspended" role="tabpanel" aria-labelledby="nav-contact-tab">
+    <div class="tab-pane fade {{ $tab == 'suspended' ? 'show active' : '' }}" id="nav-suspended" role="tabpanel" aria-labelledby="nav-contact-tab">
       @if (count($suspended_users) > 0)
       <table class="table table-bordered table-hover">
         <tr>
@@ -198,7 +201,7 @@
                       <span aria-hidden="true">&times;</span>
                     </button>
                   </div>
-                  <form action="{{route('admin.users.manage',$user->id)}}" method="POST">
+                  <form action="{{route('admin.users.manage', [$user->id, 'tab' => 'suspended'])}}" method="POST">
                   <div class="modal-body">
                       @csrf
                       @method('PATCH')
@@ -222,7 +225,7 @@
             {{-- modal end --}}
           </td>
           <td>
-            <a onclick="return confirm('Are you sure?')" href="{{ route('admin.users.soft_delete', $user->id) }}" class="btn btn-danger btn-sm">Delete</a>
+            <a onclick="return confirm('Are you sure?')" href="{{ route('admin.users.soft_delete', [$user->id, 'tab' => 'suspended']) }}" class="btn btn-danger btn-sm">Delete</a>
           </td>
         </tr>
         @endforeach
@@ -234,7 +237,7 @@
       @endif
     </div>
 
-    <div class="tab-pane fade" id="nav-trashed" role="tabpanel" aria-labelledby="nav-contact-tab">
+    <div class="tab-pane fade {{ $tab == 'trashed' ? 'show active' : '' }}" id="nav-trashed" role="tabpanel" aria-labelledby="nav-contact-tab">
       @if (count($trashed_users) > 0)
       <table class="table table-bordered table-hover">
         <tr>
@@ -260,8 +263,8 @@
 
           </td>
           <td>
-            <a onclick="return confirm('Are you sure?')" href="{{ route('admin.users.restore', $user->id) }}" class="btn btn-success btn-sm">Restore</a>
-            <a onclick="return confirm('Are you sure?')" href="{{ route('admin.users.delete', $user->id) }}" class="btn btn-danger btn-sm">Delete</a>
+            <a onclick="return confirm('Are you sure?')" href="{{ route('admin.users.restore', [$user->id, 'tab' => 'trashed']) }}" class="btn btn-success btn-sm">Restore</a>
+            <a onclick="return confirm('Are you sure?')" href="{{ route('admin.users.delete', [$user->id, 'tab' => 'trashed']) }}" class="btn btn-danger btn-sm">Delete</a>
           </td>
         </tr>
         @endforeach

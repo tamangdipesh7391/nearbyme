@@ -74,23 +74,29 @@ class AdminDashboardController extends Controller
             'suspended_providers' => $suspended_providers
         ]);
     }
-    public function softDeleteProvider($id)
+    public function softDeleteProvider(Request $request, $id)
     {
-        $provider = User::find($id);
+        $provider = User::findOrFail($id);
+        if ($error = $this->activeBookingsError($provider, 'provider')) {
+            return $this->backToTab('admin.providers', $request)->with('error', $error);
+        }
         $provider->delete();
-        return redirect()->route('admin.providers')->with('success','Provider deleted successfully');
+        return $this->backToTab('admin.providers', $request)->with('success','Provider deleted successfully');
     }
-    public function restoreProvider($id)
+    public function restoreProvider(Request $request, $id)
     {
         $provider = User::withTrashed()->find($id);
         $provider->restore();
-        return redirect()->route('admin.providers')->with('success','Provider restored successfully');
+        return $this->backToTab('admin.providers', $request)->with('success','Provider restored successfully');
     }
-    public function deleteProvider($id)
+    public function deleteProvider(Request $request, $id)
     {
-        $provider = User::withTrashed()->find($id);
+        $provider = User::withTrashed()->findOrFail($id);
+        if ($error = $this->activeBookingsError($provider, 'provider')) {
+            return $this->backToTab('admin.providers', $request)->with('error', $error);
+        }
         $provider->forceDelete();
-        return redirect()->route('admin.providers')->with('success','Provider deleted successfully');
+        return $this->backToTab('admin.providers', $request)->with('success','Provider deleted successfully');
     }
     public function manageProvider(Request $request,$id)
     {
@@ -99,9 +105,9 @@ class AdminDashboardController extends Controller
         if($request->has('status')){
             $provider->status = $request->status;
             $provider->save();
-            return redirect()->route('admin.providers')->with('success','Provider status updated successfully');
+            return $this->backToTab('admin.providers', $request)->with('success','Provider status updated successfully');
         }
-        return redirect()->route('admin.providers')->with('error','Something went wrong');
+        return $this->backToTab('admin.providers', $request)->with('error','Something went wrong');
     }
     public function listUsers()
     {
@@ -116,23 +122,29 @@ class AdminDashboardController extends Controller
             'suspended_users' => $suspended_users
         ]);
     }
-    public function softDeleteUser($id)
+    public function softDeleteUser(Request $request, $id)
     {
-        $user = User::find($id);
+        $user = User::findOrFail($id);
+        if ($error = $this->activeBookingsError($user, 'user')) {
+            return $this->backToTab('admin.users', $request)->with('error', $error);
+        }
         $user->delete();
-        return redirect()->route('admin.users')->with('success', 'User deleted successfully');
+        return $this->backToTab('admin.users', $request)->with('success', 'User deleted successfully');
     }
-    public function restoreUser($id)
+    public function restoreUser(Request $request, $id)
     {
         $user = User::withTrashed()->find($id);
         $user->restore();
-        return redirect()->route('admin.users')->with('success', 'User restored successfully');
+        return $this->backToTab('admin.users', $request)->with('success', 'User restored successfully');
     }
-    public function deleteUser($id)
+    public function deleteUser(Request $request, $id)
     {
-        $user = User::withTrashed()->find($id);
+        $user = User::withTrashed()->findOrFail($id);
+        if ($error = $this->activeBookingsError($user, 'user')) {
+            return $this->backToTab('admin.users', $request)->with('error', $error);
+        }
         $user->forceDelete();
-        return redirect()->route('admin.users')->with('success', 'User deleted successfully');
+        return $this->backToTab('admin.users', $request)->with('success', 'User deleted successfully');
     }
     public function manageUser(Request $request,$id)
     {
@@ -140,9 +152,39 @@ class AdminDashboardController extends Controller
         if($request->has('status')){
             $user->status = $request->status;
             $user->save();
-            return redirect()->route('admin.users')->with('success','User status updated successfully');
+            return $this->backToTab('admin.users', $request)->with('success','User status updated successfully');
         }
-        return redirect()->route('admin.users')->with('error','Something went wrong');
+        return $this->backToTab('admin.users', $request)->with('error','Something went wrong');
     }
 
+    /**
+     * Redirect to a list page, reopening the tab (new/active/suspended/trashed) the action came from.
+     */
+    private function backToTab($route, Request $request)
+    {
+        return redirect()->route($route)->with('tab', $request->query('tab'));
+    }
+
+    /**
+     * Build a warning if the account still has pending or in-progress bookings, otherwise null.
+     */
+    private function activeBookingsError(User $account, $label)
+    {
+        $counts = $account->unresolvedBookingCounts();
+        if ($counts['pending'] + $counts['confirmed'] === 0) {
+            return null;
+        }
+
+        $parts = [];
+        if ($counts['pending'] > 0) {
+            $parts[] = $counts['pending'].' pending';
+        }
+        if ($counts['confirmed'] > 0) {
+            $parts[] = $counts['confirmed'].' in-progress';
+        }
+
+        return 'Cannot delete this '.$label.': they have '.implode(' and ', $parts).' '
+            .\Illuminate\Support\Str::plural('booking', $counts['pending'] + $counts['confirmed'])
+            .'. Resolve them before deleting.';
+    }
 }

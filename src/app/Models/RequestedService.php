@@ -20,13 +20,14 @@ class RequestedService extends Model
         'is_seen',
         'is_seen_admin',
     ];
+    // Include soft-deleted accounts so booking history still shows who was involved.
     public function provider()
     {
-        return $this->belongsTo(User::class, 'provider_id', 'id');
+        return $this->belongsTo(User::class, 'provider_id', 'id')->withTrashed();
     }
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id', 'id');
+        return $this->belongsTo(User::class, 'user_id', 'id')->withTrashed();
     }
     public function requestedUser()
     {

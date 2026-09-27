@@ -53,7 +53,7 @@
                    </div>
                 @if ($professions->count() > 0)
                    <div class="row card-body">
-                     @foreach ($professions->sortBy('distance') as $key => $profession )
+                     @foreach ($professions->sortBy(fn ($p) => [$p->is_active == 1 ? 0 : 1, $p->distance ?? 0]) as $key => $profession )
                        
                       <div class="col-sm-12 mb-4">
                          <div class="shadow-sm card cardHover ">
@@ -127,19 +127,17 @@
                                            @php
                                                $url = "#";
                                            @endphp
-                                           @if ($profession->current_latitude != null && $profession->current_longitude != null)
-                                            @php
-                                               
-                                            $url = "https://maps.google.com/?q=".$profession->current_latitude.",".$profession->current_longitude;
-                                          @endphp  
-                                           @endif
-                                           @if (isset($profession->distance) || $profession->distance != null || $profession->distance != 0 || $profession->distance != '')
-                                              <li style="font-weight:100">
+                                           <li style="font-weight:100">
                                              <span class="bi bi-map-fill text-primary"></span> :
-                                              <a  @if ($profession->current_latitude != null && $profession->current_longitude != null) target="_blank" @endif href="{{$url}}" style="color:blue;"> 
-                                                <b><em>Locate Now</em></b></a><strong class="text-dark"> ({{$profession->distance .' KM'??'0 KM'}}) </strong>
-                                          </li>
-                                           @endif
+                                             @if ($profession->is_active == 1 && $profession->current_latitude != null && $profession->current_longitude != null)
+                                              <a target="_blank" href="https://maps.google.com/?q={{ $profession->current_latitude }},{{ $profession->current_longitude }}" style="color:blue;">
+                                                <b><em>Locate Now</em></b></a>
+                                             @else
+                                              {{-- Offline: no live location to show --}}
+                                              <b><em class="text-muted">Locate Now</em></b>
+                                             @endif
+                                             <strong class="text-dark"> ({{ $profession->distance ?? 0 }} KM) </strong>
+                                           </li>
                                            
                                            <li><span class="bi bi-telephone-fill text-primary"> : <a href="tel:{{$profession->phone??''}}" class="text-decoration-none text-dark">{{$profession->phone??'N/A'}}</a></li>
                                         </ul>
@@ -157,9 +155,11 @@
                                        @csrf
                                        <input type="hidden" name="user_latitude" value="{{$profession->current_user_lattitude??''}}">
                                        <input type="hidden" name="user_longitude" value="{{$profession->current_user_longitude??''}}">
-                                       <input type="hidden" name="user_id" value="{{Session::get('session_user')->id}}">
                                        <input type="hidden" name="provider_id" value="{{$profession->provider_id}}">
-                                       @if($profession->is_busy)
+                                       @if($profession->already_requested)
+                                       <button disabled class="btn btn-secondary rounded-pill">Already Requested</button>
+                                       <p class="small text-muted mt-2 mb-0">You have a pending or in-progress request with this provider.</p>
+                                       @elseif($profession->is_busy)
                                        <button disabled class="btn btn-warning rounded-pill">User is Busy</button>
                                        @else
                                        <button onclick="return confirm('Are you sure?')" type="submit" class="btn btn-primary rounded-pill btn-block request-btn">Request Provider</button>

@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
+use App\Rules\AllowedEmailDomain;
 
 class UserController extends Controller
 {
@@ -75,7 +76,7 @@ class UserController extends Controller
       
         $request->validate([
             'name' => 'required|min:3',
-            'email' => 'required|email|unique:users,email',
+            'email' => ['required', 'email', 'unique:users,email', new AllowedEmailDomain],
             'role' => 'required',
             'password' => 'required|min:6|max:16|confirmed'
         ]);
